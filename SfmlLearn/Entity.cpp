@@ -14,3 +14,15 @@ void Entity::draw(sf::RenderWindow &window) const {
 float Entity::getRadius() const {
     return radius;
 }
+
+bool Entity::collideWith(const Entity &other) const {
+    float dx = getPosition().x - other.getPosition().x;
+    float dy = getPosition().y - other.getPosition().y;
+    float r  = radius + other.getRadius();
+
+    return dx * dx + dy * dy < r * r;
+}
+
+sf::Vector2f Entity::getPosition() const {
+    return entity.getPosition();
+}
