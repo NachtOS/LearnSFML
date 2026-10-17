@@ -8,6 +8,7 @@
 
 int main() {
     sf::Vector2u windowSize = {800, 600};
+    sf::Vector2f bounds(windowSize);
 
     sf::RenderWindow window(sf::VideoMode(windowSize), "MyGameSFML");
     window.setFramerateLimit(120);
@@ -31,7 +32,7 @@ int main() {
         enemies.push_back(Enemy({distX(rng), distY(rng)},
             {distSpeed(rng), distSpeed(rng)}, 25.f));
     }
-    // sf::Font font; должен быть объявлен заранее так как он хранит ссылку на шрифт
+    // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
     if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) {
         return -1;
@@ -74,6 +75,9 @@ int main() {
                     lives = 3;
                     gameOver = false;
 
+                    livesText.setString("Lives: " + std::to_string(lives));
+                    scoreText.setString("Score: " + std::to_string(score));
+
                     player = Player(50.f, {400.f, 300.f}, 300);
                     coins.clear();
                     enemies.clear();
@@ -91,9 +95,9 @@ int main() {
         }
 
         if (!gameOver) {
-            player.update(dt, {800.f, 600.f});
+            player.update(dt, bounds);
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
-                enemies[i].update(dt, {800.f, 600.f});
+                enemies[i].update(dt, bounds);
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
@@ -129,11 +133,11 @@ int main() {
                     coins.push_back(Coin({x, y}, 15.f));
                 }
             }
-        }
 
-        if (static_cast<int>(enemies.size()) < 3) {
-            enemies.push_back(Enemy({distX(rng), distY(rng)},
-                            {distSpeed(rng), distSpeed(rng)}, 25.f));
+            if (enemies.size() < 3) {
+                enemies.push_back(Enemy({distX(rng), distY(rng)},
+                                {distSpeed(rng), distSpeed(rng)}, 25.f));
+            }
         }
 
         window.clear(sf::Color(0, 0, 200));
