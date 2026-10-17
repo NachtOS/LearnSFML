@@ -19,5 +19,7 @@ add_executable(app main.cpp
         Player.cpp
         Player.h
         Coin.cpp
-        Coin.h)
+        Coin.h
+        Enemy.cpp
+        Enemy.h)
 target_link_libraries(app PRIVATE SFML::Graphics)
