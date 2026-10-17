@@ -31,7 +31,7 @@ int main() {
         enemies.push_back(Enemy({distX(rng), distY(rng)},
             {distSpeed(rng), distSpeed(rng)}, 25.f));
     }
-    // шрифт определяется до текста потому что если вызвать после, то текст не будет фидеть его
+    // sf::Font font; должен быть объявлен заранее так как он хранит ссылку на шрифт
     sf::Font font;
     if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) {
         return -1;
