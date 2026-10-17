@@ -21,5 +21,7 @@ add_executable(app main.cpp
         Coin.cpp
         Coin.h
         Enemy.cpp
-        Enemy.h)
+        Enemy.h
+        Entity.cpp
+        Entity.h)
 target_link_libraries(app PRIVATE SFML::Graphics)
