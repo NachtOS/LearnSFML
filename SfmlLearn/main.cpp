@@ -46,8 +46,8 @@ int main() {
     scoreText.setPosition({10.f, 10.f});
 
     sf::Text livesText(font, "Lives: " + std::to_string(lives), 16);
-    scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition({10.f, 25.f});
+    livesText.setFillColor(sf::Color::White);
+    livesText.setPosition({10.f, 25.f});
 
     sf::Text gameOverText(font, "Game Over", 26);
     gameOverText.setFillColor(sf::Color::Red);
@@ -73,9 +73,18 @@ int main() {
                     score = 0;
                     lives = 3;
                     gameOver = false;
+
+                    player = Player(50.f, {400.f, 300.f}, 300);
+                    coins.clear();
+                    enemies.clear();
+
                     for (int i = 0; i < 3; i++) {
                         enemies.push_back(Enemy({distX(rng), distY(rng)},
                             {distSpeed(rng), distSpeed(rng)}, 25.f));
+                    }
+
+                    for (int i = 0; i < 10; i++) {
+                        coins.push_back(Coin({distX(rng), distY(rng)}, 15.f));
                     }
                 }
             }
@@ -120,6 +129,11 @@ int main() {
                     coins.push_back(Coin({x, y}, 15.f));
                 }
             }
+        }
+
+        if (static_cast<int>(enemies.size()) < 3) {
+            enemies.push_back(Enemy({distX(rng), distY(rng)},
+                            {distSpeed(rng), distSpeed(rng)}, 25.f));
         }
 
         window.clear(sf::Color(0, 0, 200));
