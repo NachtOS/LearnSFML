@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Coin.h"
 #include "Enemy.h"
+#include "Entity.h"
 
 int main() {
     sf::Vector2u windowSize = {800, 600};
@@ -22,7 +23,7 @@ int main() {
 
     std::vector<Coin> coins;
     for (int i = 0; i < 10; i++) {
-        coins.push_back(Coin({distX(rng), distY(rng)}, 15.f));
+        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}));
     }
 
     std::uniform_real_distribution<float> distSpeed(-200.f, 200.f);
@@ -88,7 +89,7 @@ int main() {
                     }
 
                     for (int i = 0; i < 10; i++) {
-                        coins.push_back(Coin({distX(rng), distY(rng)}, 15.f));
+                        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}));
                     }
                 }
             }
@@ -130,7 +131,7 @@ int main() {
                     float x = distX(rng);
                     float y = distY(rng);
 
-                    coins.push_back(Coin({x, y}, 15.f));
+                    coins.push_back(Coin(15.f, {x, y}));
                 }
             }
 
