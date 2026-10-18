@@ -1,16 +1,8 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "Entity.h"
 
-class Coin {
+class Coin : public Entity {
 public:
-    Coin(sf::Vector2f pos, float radius);
-
-    void draw(sf::RenderWindow &window) const;
-    float getRadius() const;
-    sf::Vector2f getPosition() const;
-
-private:
-    sf::CircleShape coin;
-    float radius;
+    Coin(float radius, sf::Vector2f pos);
 };
