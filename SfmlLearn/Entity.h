@@ -8,7 +8,7 @@ public:
 
     void draw(sf::RenderWindow& window) const;
     float getRadius() const;
-    bool collideWith(const Entity& other) const;
+    bool collidesWith(const Entity& other) const;
     sf::Vector2f getPosition() const;
 
     virtual ~Entity() = default;

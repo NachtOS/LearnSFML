@@ -1,8 +1,8 @@
 #include "Entity.h"
 
 Entity::Entity(float radius, sf::Color color, sf::Vector2f pos)
-    : radius(radius), entity(radius) {
-    entity.setFillColor(sf::Color(color));
+    : entity(radius), radius(radius) {
+    entity.setFillColor(color);
     entity.setOrigin({radius, radius});
     entity.setPosition(pos);
 }
@@ -15,7 +15,7 @@ float Entity::getRadius() const {
     return radius;
 }
 
-bool Entity::collideWith(const Entity &other) const {
+bool Entity::collidesWith(const Entity &other) const {
     float dx = getPosition().x - other.getPosition().x;
     float dy = getPosition().y - other.getPosition().y;
     float r  = radius + other.getRadius();

@@ -1,11 +1,7 @@
 #include "Player.h"
 
 Player::Player(float radius, sf::Vector2f startPos, float speed)
-    : Entity(radius, sf::Color(0, 200, 10), startPos), speed(speed) {
-    entity.setFillColor(sf::Color(0, 200, 10));
-    entity.setOrigin({radius, radius});
-    entity.setPosition(startPos);
-}
+    : Entity(radius, sf::Color(0, 200, 10), startPos), speed(speed) {}
 
 void Player::update(float dt, sf::Vector2f bounds) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
