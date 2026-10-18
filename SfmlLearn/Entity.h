@@ -7,6 +7,7 @@ public:
     Entity(float radius, sf::Color color, sf::Vector2f pos);
 
     void draw(sf::RenderWindow& window) const;
+    void setTexure(const sf::Texture &texture);
     virtual void update(float dt, sf::Vector2f bounds) {}
     float getRadius() const;
     bool collidesWith(const Entity& other) const;

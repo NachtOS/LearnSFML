@@ -11,6 +11,11 @@ void Entity::draw(sf::RenderWindow &window) const {
     window.draw(entity);
 }
 
+void Entity::setTexure(const sf::Texture &texture) {
+    entity.setTexture(&texture);
+    entity.setFillColor(sf::Color::White);
+}
+
 float Entity::getRadius() const {
     return radius;
 }
