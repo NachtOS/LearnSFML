@@ -5,7 +5,6 @@
 #include "Player.h"
 #include "Coin.h"
 #include "Enemy.h"
-#include "Entity.h"
 
 int main() {
     sf::Vector2u windowSize = {800, 600};

@@ -5,4 +5,5 @@
 class Coin : public Entity {
 public:
     Coin(float radius, sf::Vector2f pos);
+    void onTouch(int& score, int& lives) override;
 };
