@@ -102,11 +102,7 @@ int main() {
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
-                float dx = player.getPosition().x - enemies[i].getPosition().x;
-                float dy = player.getPosition().y - enemies[i].getPosition().y;
-                float r = player.getRadius() + enemies[i].getRadius();
-
-                if (dx * dx + dy * dy < r * r) {
+                if (player.collidesWith(enemies[i])) {
                     enemies.erase(enemies.begin() + i);
                     --lives;
                     livesText.setString("Lives: " + std::to_string(lives));
@@ -115,11 +111,7 @@ int main() {
             }
 
             for (int i = static_cast<int>(coins.size()) - 1; i >= 0; --i) {
-                float dx = player.getPosition().x - coins[i].getPosition().x;
-                float dy = player.getPosition().y - coins[i].getPosition().y;
-                float r = player.getRadius() + coins[i].getRadius();
-
-                if (dx * dx + dy * dy < r * r) {
+                if (player.collidesWith(coins[i])) {
                     coins.erase(coins.begin() + i);
                     ++score;
                     scoreText.setString("Score: " + std::to_string(score));
