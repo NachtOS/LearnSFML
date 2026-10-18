@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-
+// radius и entity находятся в protected потому что их должны видеть дочерние классы
 class Entity {
 public:
     Entity(float radius, sf::Color color, sf::Vector2f pos);
