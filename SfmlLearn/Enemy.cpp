@@ -26,7 +26,3 @@ void Enemy::update(float dt, sf::Vector2f bounds) {
 
     entity.setPosition(pos);
 }
-
-void Enemy::onTouch(int& /*score*/, int& lives) {
-    --lives;
-}

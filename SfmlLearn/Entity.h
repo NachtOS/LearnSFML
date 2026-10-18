@@ -8,7 +8,6 @@ public:
 
     void draw(sf::RenderWindow& window) const;
     virtual void update(float dt, sf::Vector2f bounds) {}
-    virtual void onTouch(int& score, int& lives) {}
     float getRadius() const;
     bool collidesWith(const Entity& other) const;
     sf::Vector2f getPosition() const;
