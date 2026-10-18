@@ -12,14 +12,14 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(windowSize), "MyGameSFML");
     window.setFramerateLimit(120);
-
+    // текстура объявлена раньше потому что она хранит ссылку на текстуру игрока
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("assets/player.png")) {
         return -1;
     }
 
     Player player(50.f, {400.f, 300.f}, 300);
-    player.setTexure(playerTexture);
+    player.setTexture(playerTexture);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -43,9 +43,6 @@ int main() {
     if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) {
         return -1;
     }
-
-    sf::Sprite sprite(playerTexture);
-    sprite.setPosition({600.f, 20.f});
 
     int lives = 3;
     int score = 0;
@@ -88,7 +85,7 @@ int main() {
                     scoreText.setString("Score: " + std::to_string(score));
 
                     player = Player(50.f, {400.f, 300.f}, 300);
-                    player.setTexure(playerTexture);
+                    player.setTexture(playerTexture);
                     coins.clear();
                     enemies.clear();
 
@@ -154,7 +151,6 @@ int main() {
 
         window.draw(scoreText);
         window.draw(livesText);
-        window.draw(sprite);
         player.draw(window);
 
         if (gameOver) {

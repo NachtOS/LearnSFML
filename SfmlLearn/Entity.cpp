@@ -11,7 +11,7 @@ void Entity::draw(sf::RenderWindow &window) const {
     window.draw(entity);
 }
 
-void Entity::setTexure(const sf::Texture &texture) {
+void Entity::setTexture(const sf::Texture &texture) {
     entity.setTexture(&texture);
     entity.setFillColor(sf::Color::White);
 }
