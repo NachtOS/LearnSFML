@@ -18,6 +18,16 @@ int main() {
         return -1;
     }
 
+    sf::Texture enemyTexture;
+    if (!enemyTexture.loadFromFile("assets/enemy.png")) {
+        return -1;
+    }
+
+    sf::Texture coinTexture;
+    if (!coinTexture.loadFromFile("assets/coin.png")) {
+        return -1;
+    }
+
     Player player(50.f, {400.f, 300.f}, 300);
     player.setTexture(playerTexture);
     sf::Clock clock;
@@ -28,7 +38,7 @@ int main() {
 
     std::vector<Coin> coins;
     for (int i = 0; i < 10; i++) {
-        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}));
+        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}, coinTexture));
     }
 
     std::uniform_real_distribution<float> distSpeed(-200.f, 200.f);
@@ -36,7 +46,7 @@ int main() {
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
         enemies.push_back(Enemy({distX(rng), distY(rng)},
-            {distSpeed(rng), distSpeed(rng)}, 25.f));
+            {distSpeed(rng), distSpeed(rng)}, 25.f, enemyTexture));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -91,11 +101,11 @@ int main() {
 
                     for (int i = 0; i < 3; i++) {
                         enemies.push_back(Enemy({distX(rng), distY(rng)},
-                            {distSpeed(rng), distSpeed(rng)}, 25.f));
+                            {distSpeed(rng), distSpeed(rng)}, 25.f, enemyTexture));
                     }
 
                     for (int i = 0; i < 10; i++) {
-                        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}));
+                        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}, coinTexture));
                     }
                 }
             }
@@ -129,13 +139,13 @@ int main() {
                     float x = distX(rng);
                     float y = distY(rng);
 
-                    coins.push_back(Coin(15.f, {x, y}));
+                    coins.push_back(Coin(15.f, {x, y}, coinTexture));
                 }
             }
 
             if (enemies.size() < 3) {
                 enemies.push_back(Enemy({distX(rng), distY(rng)},
-                                {distSpeed(rng), distSpeed(rng)}, 25.f));
+                                {distSpeed(rng), distSpeed(rng)}, 25.f, enemyTexture));
             }
         }
 

@@ -1,7 +1,9 @@
 #include "Enemy.h"
 
-Enemy::Enemy(sf::Vector2f pos, sf::Vector2f velocity, float radius)
-    : Entity(radius, sf::Color(194, 39, 25), pos), velocity(velocity) {}
+Enemy::Enemy(sf::Vector2f pos, sf::Vector2f velocity, float radius, const sf::Texture& texture)
+    : Entity(radius, sf::Color::White, pos), velocity(velocity) {
+    entity.setTexture(&texture);
+}
 
 void Enemy::update(float dt, sf::Vector2f bounds) {
     entity.move(velocity * dt);
