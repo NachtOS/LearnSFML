@@ -41,12 +41,12 @@ int main() {
         coins.push_back(Coin(15.f, {distX(rng), distY(rng)}, coinTexture));
     }
 
-    std::uniform_real_distribution<float> distSpeed(-200.f, 200.f);
+    std::uniform_real_distribution<float> distSpeed(60.f, 120.f);
 
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
         enemies.push_back(Enemy({distX(rng), distY(rng)},
-            {distSpeed(rng), distSpeed(rng)}, 25.f, enemyTexture));
+            distSpeed(rng), 25.f, enemyTexture));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -101,7 +101,7 @@ int main() {
 
                     for (int i = 0; i < 3; i++) {
                         enemies.push_back(Enemy({distX(rng), distY(rng)},
-                            {distSpeed(rng), distSpeed(rng)}, 25.f, enemyTexture));
+                            distSpeed(rng), 25.f, enemyTexture));
                     }
 
                     for (int i = 0; i < 10; i++) {
@@ -145,7 +145,11 @@ int main() {
 
             if (enemies.size() < 3) {
                 enemies.push_back(Enemy({distX(rng), distY(rng)},
-                                {distSpeed(rng), distSpeed(rng)}, 25.f, enemyTexture));
+                                distSpeed(rng), 25.f, enemyTexture));
+            }
+
+            for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
+                enemies[i].chase(player.getPosition(), dt);
             }
         }
 
