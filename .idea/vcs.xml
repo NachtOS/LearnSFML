@@ -3,5 +3,10 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/SfmlLearn/cmake-build-debug/_deps/freetype-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/SfmlLearn/cmake-build-debug/_deps/freetype-src/subprojects/dlg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/SfmlLearn/cmake-build-debug/_deps/harfbuzz-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/SfmlLearn/cmake-build-debug/_deps/sfml-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/SfmlLearn/cmake-build-debug/_deps/sheenbidi-src" vcs="Git" />
   </component>
 </project>
