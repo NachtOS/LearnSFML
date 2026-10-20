@@ -12,7 +12,7 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(windowSize), "MyGameSFML");
     window.setFramerateLimit(120);
-    // текстура объявлена раньше потому что она хранит ссылку на текстуру игрока
+
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("assets/player.png")) {
         return -1;
