@@ -8,7 +8,8 @@
 
 int main() {
     sf::Vector2u windowSize = {800, 600};
-    sf::Vector2f bounds(windowSize);
+    const sf::Vector2f bounds(windowSize);
+    sf::Vector2f worldSize = {2400.f, 1800.f};
 
     sf::RenderWindow window(sf::VideoMode(windowSize), "MyGameSFML");
     window.setFramerateLimit(120);
@@ -28,13 +29,13 @@ int main() {
         return -1;
     }
 
-    Player player(50.f, {400.f, 300.f}, 300);
+    Player player(50.f, {worldSize.x / 2, worldSize.y / 2}, 300);
     player.setTexture(playerTexture);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> distX(15.f, 785.f);
-    std::uniform_real_distribution<float> distY(15.f, 585.f);
+    std::uniform_real_distribution<float> distX(15.f, worldSize.x - 15);
+    std::uniform_real_distribution<float> distY(15.f, worldSize.y - 15);
 
     std::vector<Coin> coins;
     for (int i = 0; i < 10; i++) {
@@ -74,6 +75,8 @@ int main() {
     pressRText.setFillColor(sf::Color::Red);
     pressRText.setPosition({337.f, 300.f});
 
+    sf::View view({400.f, 300.f}, {800.f, 600.f});
+
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
            или когда фпс низкий то не был медленным */
@@ -112,9 +115,9 @@ int main() {
         }
 
         if (!gameOver) {
-            player.update(dt, bounds);
+            player.update(dt, worldSize);
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
-                enemies[i].update(dt, bounds);
+                enemies[i].update(dt, worldSize);
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
@@ -153,7 +156,38 @@ int main() {
             }
         }
 
+        sf::Vector2f camPos = player.getPosition();
+
+        if (camPos.x < bounds.x / 2.f) {
+            camPos.x = bounds.x / 2.f;
+        }
+        if (camPos.x > worldSize.x - bounds.x / 2.f) {
+            camPos.x = worldSize.x - bounds.x / 2.f;
+        }
+        if (camPos.y < bounds.y / 2.f) {
+            camPos.y = bounds.y / 2.f;
+        }
+        if (camPos.y > worldSize.y - bounds.y / 2.f) {
+            camPos.y = worldSize.y - bounds.y / 2.f;
+        }
+
+        view.setCenter(player.getPosition());
+        window.setView(view);
         window.clear(sf::Color(0, 0, 200));
+
+        for (float i = 0; i <= worldSize.x; i += 100) {
+            sf::RectangleShape lineX({2.f, worldSize.y});
+            lineX.setPosition({i, 0.f});
+            lineX.setFillColor(sf::Color(35, 35, 220));
+            window.draw(lineX);
+        }
+
+        for (float i = 0; i <= worldSize.y; i += 100) {
+            sf::RectangleShape lineX({worldSize.x, 2.f});
+            lineX.setPosition({0.f, i});
+            lineX.setFillColor(sf::Color(35, 35, 220));
+            window.draw(lineX);
+        }
 
         for (const Coin& coin : coins) {
             coin.draw(window);
@@ -163,9 +197,9 @@ int main() {
             enemy.draw(window);
         }
 
+        player.draw(window);
         window.draw(scoreText);
         window.draw(livesText);
-        player.draw(window);
 
         if (gameOver) {
             window.draw(gameOverText);
