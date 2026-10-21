@@ -97,7 +97,7 @@ int main() {
                     livesText.setString("Lives: " + std::to_string(lives));
                     scoreText.setString("Score: " + std::to_string(score));
 
-                    player = Player(50.f, {400.f, 300.f}, 300);
+                    player = Player(50.f, {windowSize.x / 2.f, windowSize.y / 2.f}, 300);
                     player.setTexture(playerTexture);
                     coins.clear();
                     enemies.clear();
@@ -116,9 +116,6 @@ int main() {
 
         if (!gameOver) {
             player.update(dt, worldSize);
-            for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
-                enemies[i].update(dt, worldSize);
-            }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
                 if (player.collidesWith(enemies[i])) {
@@ -171,7 +168,7 @@ int main() {
             camPos.y = worldSize.y - bounds.y / 2.f;
         }
 
-        view.setCenter(player.getPosition());
+        view.setCenter(camPos);
         window.setView(view);
         window.clear(sf::Color(0, 0, 200));
 
@@ -198,6 +195,7 @@ int main() {
         }
 
         player.draw(window);
+        window.setView(window.getDefaultView());
         window.draw(scoreText);
         window.draw(livesText);
 
