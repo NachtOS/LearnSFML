@@ -4,10 +4,9 @@
 // radius и entity находятся в protected потому что их должны видеть дочерние классы
 class Entity {
 public:
-    Entity(float radius, sf::Color color, sf::Vector2f pos);
+    Entity(const sf::Texture& texture, sf::Vector2f pos, float size, float hitRadius);
 
     void draw(sf::RenderWindow& window) const;
-    void setTexture(const sf::Texture &texture);
     virtual void update(float dt, sf::Vector2f bounds) {}
     float getRadius() const;
     bool collidesWith(const Entity& other) const;
@@ -15,6 +14,6 @@ public:
 
     virtual ~Entity() = default;
 protected:
-    sf::CircleShape entity;
+    sf::Sprite sprite;
     float radius;
 };

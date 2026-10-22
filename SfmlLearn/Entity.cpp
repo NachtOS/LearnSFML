@@ -1,19 +1,13 @@
 #include "Entity.h"
 
-Entity::Entity(float radius, sf::Color color, sf::Vector2f pos)
-    : entity(radius), radius(radius) {
-    entity.setFillColor(color);
-    entity.setOrigin({radius, radius});
-    entity.setPosition(pos);
+Entity::Entity(const sf::Texture& texture, sf::Vector2f pos, float size, float hitRadius)
+    : sprite(texture), radius(hitRadius) {
+    sprite.setOrigin({radius, radius});
+    sprite.setPosition(pos);
 }
 
 void Entity::draw(sf::RenderWindow &window) const {
-    window.draw(entity);
-}
-
-void Entity::setTexture(const sf::Texture &texture) {
-    entity.setTexture(&texture);
-    entity.setFillColor(sf::Color::White);
+    window.draw(sprite);
 }
 
 float Entity::getRadius() const {
@@ -29,5 +23,5 @@ bool Entity::collidesWith(const Entity &other) const {
 }
 
 sf::Vector2f Entity::getPosition() const {
-    return entity.getPosition();
+    return sprite.getPosition();
 }

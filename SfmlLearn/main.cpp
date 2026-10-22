@@ -29,8 +29,7 @@ int main() {
         return -1;
     }
 
-    Player player(50.f, {worldSize.x / 2, worldSize.y / 2}, 300);
-    player.setTexture(playerTexture);
+    Player player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -39,15 +38,14 @@ int main() {
 
     std::vector<Coin> coins;
     for (int i = 0; i < 10; i++) {
-        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}, coinTexture));
+        coins.push_back(Coin(coinTexture, {distX(rng), distY(rng)}));
     }
 
     std::uniform_real_distribution<float> distSpeed(60.f, 120.f);
 
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
-        enemies.push_back(Enemy({distX(rng), distY(rng)},
-            distSpeed(rng), 25.f, enemyTexture));
+        enemies.push_back(Enemy(enemyTexture, {distX(rng), distY(rng)}, distSpeed(rng)));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -97,18 +95,16 @@ int main() {
                     livesText.setString("Lives: " + std::to_string(lives));
                     scoreText.setString("Score: " + std::to_string(score));
 
-                    player = Player(50.f, {windowSize.x / 2.f, windowSize.y / 2.f}, 300);
-                    player.setTexture(playerTexture);
+                    player = Player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300);
                     coins.clear();
                     enemies.clear();
 
                     for (int i = 0; i < 3; i++) {
-                        enemies.push_back(Enemy({distX(rng), distY(rng)},
-                            distSpeed(rng), 25.f, enemyTexture));
+                        enemies.push_back(Enemy(enemyTexture, {distX(rng), distY(rng)}, distSpeed(rng)));
                     }
 
                     for (int i = 0; i < 10; i++) {
-                        coins.push_back(Coin(15.f, {distX(rng), distY(rng)}, coinTexture));
+                        coins.push_back(Coin(coinTexture, {distX(rng), distY(rng)}));
                     }
                 }
             }
@@ -139,13 +135,12 @@ int main() {
                     float x = distX(rng);
                     float y = distY(rng);
 
-                    coins.push_back(Coin(15.f, {x, y}, coinTexture));
+                    coins.push_back(Coin(coinTexture, {x, y}));
                 }
             }
 
             if (enemies.size() < 3) {
-                enemies.push_back(Enemy({distX(rng), distY(rng)},
-                                distSpeed(rng), 25.f, enemyTexture));
+                enemies.push_back(Enemy(enemyTexture, {distX(rng), distY(rng)}, distSpeed(rng)));
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {

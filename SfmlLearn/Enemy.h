@@ -4,7 +4,7 @@
 
 class Enemy : public Entity {
 public:
-    Enemy(sf::Vector2f pos, float speed, float radius, const sf::Texture& texture);
+    Enemy(const sf::Texture& texture, sf::Vector2f pos, float speed);
     void chase(sf::Vector2f target, float dt);
 private:
     float speed;

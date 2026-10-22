@@ -4,5 +4,5 @@
 
 class Coin : public Entity {
 public:
-    Coin(float radius, sf::Vector2f pos, const sf::Texture& texture);
+    Coin(const sf::Texture& texture, sf::Vector2f pos);
 };
