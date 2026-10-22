@@ -11,11 +11,11 @@ int main() {
     const sf::Vector2f bounds(windowSize);
     sf::Vector2f worldSize = {2400.f, 1800.f};
 
-    sf::RenderWindow window(sf::VideoMode(windowSize), "MyGameSFML");
+    sf::RenderWindow window(sf::VideoMode(windowSize), "HUNT");
     window.setFramerateLimit(120);
 
     sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile("assets/player.png")) {
+    if (!playerTexture.loadFromFile("assets/player/_Run.png")) {
         return -1;
     }
 
@@ -73,7 +73,7 @@ int main() {
     pressRText.setFillColor(sf::Color::Red);
     pressRText.setPosition({337.f, 300.f});
 
-    sf::View view({400.f, 300.f}, {800.f, 600.f});
+    sf::View view({windowSize.x / 2.f, windowSize.y / 2.f}, {800.f, 600.f});
 
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано

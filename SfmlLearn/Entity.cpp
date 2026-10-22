@@ -2,10 +2,7 @@
 
 Entity::Entity(const sf::Texture& texture, sf::Vector2f pos, float size, float hitRadius)
     : sprite(texture), radius(hitRadius) {
-    sf::Vector2f texSize(texture.getSize());
-    sprite.setOrigin(texSize / 2.f);
-    float scaling = size / texSize.x;
-    sprite.setScale({scaling, scaling});
+    setFrame(sprite.getTextureRect(), size);
     sprite.setPosition(pos);
 }
 
@@ -27,4 +24,12 @@ bool Entity::collidesWith(const Entity &other) const {
 
 sf::Vector2f Entity::getPosition() const {
     return sprite.getPosition();
+}
+
+void Entity::setFrame(sf::IntRect rect, float size) {
+    sprite.setTextureRect(rect);
+    sf::Vector2f frameSize(rect.size);
+    sprite.setOrigin(frameSize / 2.f);
+    float scaling = size / frameSize.x;
+    sprite.setScale({scaling, scaling});
 }

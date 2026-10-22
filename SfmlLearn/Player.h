@@ -9,4 +9,11 @@ public:
 
 private:
     float speed;
+    sf::Vector2i frameSize;
+    int frameCount;
+    float frameTime;
+    int frame = 0;
+    float frameTimer = 0.f;
+
+    void animate(float dt, bool moving);
 };

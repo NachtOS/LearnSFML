@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-// radius и entity находятся в protected потому что их должны видеть дочерние классы
+
 class Entity {
 public:
     Entity(const sf::Texture& texture, sf::Vector2f pos, float size, float hitRadius);
@@ -16,4 +16,6 @@ public:
 protected:
     sf::Sprite sprite;
     float radius;
+
+    void setFrame(sf::IntRect rect, float size);
 };
