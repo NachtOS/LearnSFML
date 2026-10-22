@@ -1,26 +1,30 @@
+#include <cmath>
+
 #include "Player.h"
 
-Player::Player(const sf::Texture& texture, sf::Vector2f pos, float speed)
-    : Entity(texture, pos, 120.f, 28.f), speed(speed), frameSize(120, 80), frameCount(10), frameTime(0.1f) {
-    setFrame(sf::IntRect({0, 0}, frameSize), 120.f);
+Player::Player(const sf::Texture& texture, sf::Vector2f pos, float speed, float size)
+    : Entity(texture, pos, size, 37.f), speed(speed), frameSize(120, 80), frameCount(10), frameTime(0.08f) {
+    setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
 void Player::update(float dt, sf::Vector2f bounds) {
     bool moving = false;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
         sprite.move({-speed * dt, 0.f});
         moving = true;
+        sprite.setScale({-std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
         sprite.move({speed * dt, 0.f});
         moving = true;
+        sprite.setScale({std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
         sprite.move({0.f, -speed * dt});
         moving = true;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
         sprite.move({0.f, speed * dt});
         moving = true;
     }
@@ -47,4 +51,6 @@ void Player::animate(float dt, bool moving) {
             frame = (frame + 1) % frameCount;
         }
     }
+
+    sprite.setTextureRect(sf::IntRect({frame * frameSize.x, 0}, frameSize));
 }

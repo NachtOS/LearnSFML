@@ -29,7 +29,7 @@ int main() {
         return -1;
     }
 
-    Player player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300);
+    Player player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 160.f);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -95,7 +95,7 @@ int main() {
                     livesText.setString("Lives: " + std::to_string(lives));
                     scoreText.setString("Score: " + std::to_string(score));
 
-                    player = Player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300);
+                    player = Player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 160.f);
                     coins.clear();
                     enemies.clear();
 

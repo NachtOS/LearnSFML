@@ -4,7 +4,7 @@
 
 class Player : public Entity {
 public:
-    Player(const sf::Texture& texture, sf::Vector2f startPos, float speed);
+    Player(const sf::Texture& texture, sf::Vector2f startPos, float speed, float size);
     void update(float dt, sf::Vector2f bounds) override;
 
 private:
