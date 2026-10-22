@@ -2,7 +2,10 @@
 
 Entity::Entity(const sf::Texture& texture, sf::Vector2f pos, float size, float hitRadius)
     : sprite(texture), radius(hitRadius) {
-    sprite.setOrigin({radius, radius});
+    sf::Vector2f texSize(texture.getSize());
+    sprite.setOrigin(texSize / 2.f);
+    float scaling = size / texSize.x;
+    sprite.setScale({scaling, scaling});
     sprite.setPosition(pos);
 }
 

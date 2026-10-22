@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy::Enemy(const sf::Texture& texture, sf::Vector2f pos, float speed)
-    : Entity(texture, pos, 60.f, 18.f), speed(speed) {}
+    : Entity(texture, pos, 100.f, 18.f), speed(speed) {}
 
 void Enemy::chase(sf::Vector2f target, float dt) {
     sf::Vector2f toTarget = target - sprite.getPosition();

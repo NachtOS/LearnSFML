@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(const sf::Texture& texture, sf::Vector2f pos, float speed)
-    : Entity(texture, pos, 100.f, 28.f), speed(speed) {}
+    : Entity(texture, pos, 120.f, 28.f), speed(speed) {}
 
 void Player::update(float dt, sf::Vector2f bounds) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
