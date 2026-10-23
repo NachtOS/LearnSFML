@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 
+enum class State { Idle, Run };
+
 class Player : public Entity {
 public:
     Player(const sf::Texture& idleTex, const sf::Texture& runTex, sf::Vector2f startPos, float speed, float size);
@@ -12,7 +14,7 @@ private:
     const sf::Texture* runTexture;
     int idleFrames;
     int runFrames;
-    bool wasMoving = false;
+    State state = State::Idle;
     float speed;
     sf::Vector2i frameSize;
     int frameCount;
@@ -20,5 +22,5 @@ private:
     int frame = 0;
     float frameTimer = 0.f;
 
-    void animate(float dt, bool moving);
+    void animate(float dt, State state);
 };

@@ -9,25 +9,25 @@ Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, sf::Vector
 }
 
 void Player::update(float dt, sf::Vector2f bounds) {
-    bool moving = false;
+    State newState = State::Idle;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
         sprite.move({-speed * dt, 0.f});
-        moving = true;
+        newState = State::Run;
         sprite.setScale({-std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
         sprite.move({speed * dt, 0.f});
-        moving = true;
+        newState = State::Run;
         sprite.setScale({std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
         sprite.move({0.f, -speed * dt});
-        moving = true;
+        newState = State::Run;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
         sprite.move({0.f, speed * dt});
-        moving = true;
+        newState = State::Run;
     }
 
     sf::Vector2f pos = sprite.getPosition();
@@ -38,15 +38,15 @@ void Player::update(float dt, sf::Vector2f bounds) {
     if (pos.y > bounds.y - radius) pos.y = bounds.y - radius;
 
     sprite.setPosition(pos);
-    animate(dt, moving);
+    animate(dt, newState);
 }
 
-void Player::animate(float dt, bool moving) {
-    if (moving != wasMoving) {
-        wasMoving = moving;
+void Player::animate(float dt, State newState) {
+    if (newState != state) {
+        state = newState;
         frame = 0;
         frameTimer = 0;
-        if (moving) {
+        if (newState == State::Run) {
             sprite.setTexture(*runTexture);
             frameCount = runFrames;
         } else {
