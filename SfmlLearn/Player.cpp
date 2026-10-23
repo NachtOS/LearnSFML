@@ -2,9 +2,10 @@
 
 #include "Player.h"
 
-Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, sf::Vector2f pos, float speed, float size)
-    : Entity(idleTex, pos, size, 32.f), idleTexture(&idleTex), runTexture(&runTex), idleFrames(10), runFrames(10),
-    speed(speed), frameSize(120, 80), frameCount(idleFrames), frameTime(0.08f) {
+Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::Texture& attackTex, sf::Vector2f pos,
+    float speed, float size)
+    : Entity(idleTex, pos, size, 32.f), idleTexture(&idleTex), runTexture(&runTex), attackTexture(&attackTex),
+    idleFrames(10), runFrames(10), attackFrames(6), speed(speed), frameSize(120, 80), frameCount(idleFrames), frameTime(0.08f) {
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
@@ -30,6 +31,10 @@ void Player::update(float dt, sf::Vector2f bounds) {
         newState = State::Run;
     }
 
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        newState = State::Attack;
+    }
+
     sf::Vector2f pos = sprite.getPosition();
 
     if (pos.x < radius) pos.x = radius;
@@ -42,17 +47,24 @@ void Player::update(float dt, sf::Vector2f bounds) {
 }
 
 void Player::animate(float dt, State newState) {
-    if (newState != state) {
-        state = newState;
-        frame = 0;
-        frameTimer = 0;
-        if (newState == State::Run) {
-            sprite.setTexture(*runTexture);
-            frameCount = runFrames;
-        } else {
+    state = newState;
+    switch (state) {
+        case State::Idle:
             sprite.setTexture(*idleTexture);
             frameCount = idleFrames;
-        }
+            break;
+        case State::Run:
+            sprite.setTexture(*runTexture);
+            frameCount = runFrames;
+            break;
+        case State::Attack:
+            sprite.setTexture(*attackTexture);
+            frameCount = attackFrames;
+            break;
+        default:
+            sprite.setTexture(*idleTexture);
+            frameCount = idleFrames;
+            break;
     }
 
     frameTimer += dt;

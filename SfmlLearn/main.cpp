@@ -9,7 +9,7 @@
 int main() {
     sf::Vector2u windowSize = {1000, 800};
     const sf::Vector2f bounds(windowSize);
-    sf::Vector2f worldSize = {2400.f, 1800.f};
+    sf::Vector2f worldSize = {4800.f, 3600.f};
 
     sf::RenderWindow window(sf::VideoMode(windowSize), "HUNT");
     window.setFramerateLimit(120);
@@ -24,6 +24,11 @@ int main() {
         return -1;
     }
 
+    sf::Texture playerAttackTexture;
+    if (!playerAttackTexture.loadFromFile("assets/player/_Attack2.png")) {
+        return -1;
+    }
+
     sf::Texture enemyRunTexture;
     if (!enemyRunTexture.loadFromFile("assets/enemy/Skeleton_01_White_Walk.png")) {
         return -1;
@@ -34,7 +39,8 @@ int main() {
         return -1;
     }
 
-    Player player(playerIdleTexture, playerRunTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
+    Player player(playerIdleTexture, playerRunTexture, playerAttackTexture,
+        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -100,7 +106,8 @@ int main() {
                     livesText.setString("Lives: " + std::to_string(lives));
                     scoreText.setString("Score: " + std::to_string(score));
 
-                    player = Player(playerIdleTexture, playerRunTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
+                    player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture,
+                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
                     coins.clear();
                     enemies.clear();
 
