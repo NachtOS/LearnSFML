@@ -3,8 +3,8 @@
 #include "Player.h"
 
 Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, sf::Vector2f pos, float speed, float size)
-    : Entity(idleTex, pos, size, 37.f), idleTexture(&idleTex), runTexture(&runTex), idleFrames(10), runFrames(10),
-    speed(speed), frameSize(120, 80),frameCount(idleFrames), frameTime(0.08f) {
+    : Entity(idleTex, pos, size, 32.f), idleTexture(&idleTex), runTexture(&runTex), idleFrames(10), runFrames(10),
+    speed(speed), frameSize(120, 80), frameCount(idleFrames), frameTime(0.08f) {
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 

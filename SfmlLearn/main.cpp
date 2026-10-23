@@ -14,18 +14,18 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(windowSize), "HUNT");
     window.setFramerateLimit(120);
 
-    sf::Texture idleTexture;
-    if (!idleTexture.loadFromFile("assets/player/_Idle.png")) {
+    sf::Texture playerIdleTexture;
+    if (!playerIdleTexture.loadFromFile("assets/player/_Idle.png")) {
         return -1;
     }
 
-    sf::Texture runTexture;
-    if (!runTexture.loadFromFile("assets/player/_Run.png")) {
+    sf::Texture playerRunTexture;
+    if (!playerRunTexture.loadFromFile("assets/player/_Run.png")) {
         return -1;
     }
 
-    sf::Texture enemyTexture;
-    if (!enemyTexture.loadFromFile("assets/enemy.png")) {
+    sf::Texture enemyRunTexture;
+    if (!enemyRunTexture.loadFromFile("assets/enemy/Skeleton_01_White_Walk.png")) {
         return -1;
     }
 
@@ -34,7 +34,7 @@ int main() {
         return -1;
     }
 
-    Player player(idleTexture, runTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
+    Player player(playerIdleTexture, playerRunTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -50,7 +50,7 @@ int main() {
 
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
-        enemies.push_back(Enemy(enemyTexture, {distX(rng), distY(rng)}, distSpeed(rng)));
+        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -78,7 +78,7 @@ int main() {
     pressRText.setFillColor(sf::Color::Red);
     pressRText.setPosition({337.f, 300.f});
 
-    sf::View view({windowSize.x / 2.f, windowSize.y / 2.f}, {800.f, 600.f});
+    sf::View view({windowSize.x / 2.f, windowSize.y / 2.f}, {bounds.x, bounds.y});
 
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
@@ -100,12 +100,12 @@ int main() {
                     livesText.setString("Lives: " + std::to_string(lives));
                     scoreText.setString("Score: " + std::to_string(score));
 
-                    player = Player(idleTexture, runTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
+                    player = Player(playerIdleTexture, playerRunTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
                     coins.clear();
                     enemies.clear();
 
                     for (int i = 0; i < 3; i++) {
-                        enemies.push_back(Enemy(enemyTexture, {distX(rng), distY(rng)}, distSpeed(rng)));
+                        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f));
                     }
 
                     for (int i = 0; i < 10; i++) {
@@ -145,7 +145,7 @@ int main() {
             }
 
             if (enemies.size() < 3) {
-                enemies.push_back(Enemy(enemyTexture, {distX(rng), distY(rng)}, distSpeed(rng)));
+                enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f));
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
