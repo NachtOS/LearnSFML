@@ -7,15 +7,20 @@
 #include "Enemy.h"
 
 int main() {
-    sf::Vector2u windowSize = {800, 600};
+    sf::Vector2u windowSize = {1000, 800};
     const sf::Vector2f bounds(windowSize);
     sf::Vector2f worldSize = {2400.f, 1800.f};
 
     sf::RenderWindow window(sf::VideoMode(windowSize), "HUNT");
     window.setFramerateLimit(120);
 
-    sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile("assets/player/_Run.png")) {
+    sf::Texture idleTexture;
+    if (!idleTexture.loadFromFile("assets/player/_Idle.png")) {
+        return -1;
+    }
+
+    sf::Texture runTexture;
+    if (!runTexture.loadFromFile("assets/player/_Run.png")) {
         return -1;
     }
 
@@ -29,7 +34,7 @@ int main() {
         return -1;
     }
 
-    Player player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 160.f);
+    Player player(idleTexture, runTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -95,7 +100,7 @@ int main() {
                     livesText.setString("Lives: " + std::to_string(lives));
                     scoreText.setString("Score: " + std::to_string(score));
 
-                    player = Player(playerTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 160.f);
+                    player = Player(idleTexture, runTexture, {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
                     coins.clear();
                     enemies.clear();
 

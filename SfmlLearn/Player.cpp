@@ -2,8 +2,9 @@
 
 #include "Player.h"
 
-Player::Player(const sf::Texture& texture, sf::Vector2f pos, float speed, float size)
-    : Entity(texture, pos, size, 37.f), speed(speed), frameSize(120, 80), frameCount(10), frameTime(0.08f) {
+Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, sf::Vector2f pos, float speed, float size)
+    : Entity(idleTex, pos, size, 37.f), idleTexture(&idleTex), runTexture(&runTex), idleFrames(10), runFrames(10),
+    speed(speed), frameSize(120, 80),frameCount(idleFrames), frameTime(0.08f) {
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
@@ -41,15 +42,23 @@ void Player::update(float dt, sf::Vector2f bounds) {
 }
 
 void Player::animate(float dt, bool moving) {
-    if (!moving) {
+    if (moving != wasMoving) {
+        wasMoving = moving;
         frame = 0;
         frameTimer = 0;
-    } else {
-        frameTimer += dt;
-        if (frameTimer >= frameTime) {
-            frameTimer -= frameTime;
-            frame = (frame + 1) % frameCount;
+        if (moving) {
+            sprite.setTexture(*runTexture);
+            frameCount = runFrames;
+        } else {
+            sprite.setTexture(*idleTexture);
+            frameCount = idleFrames;
         }
+    }
+
+    frameTimer += dt;
+    if (frameTimer >= frameTime) {
+        frameTimer -= frameTime;
+        frame = (frame + 1) % frameCount;
     }
 
     sprite.setTextureRect(sf::IntRect({frame * frameSize.x, 0}, frameSize));
