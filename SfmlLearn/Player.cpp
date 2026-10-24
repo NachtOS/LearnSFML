@@ -31,8 +31,15 @@ void Player::update(float dt, sf::Vector2f bounds) {
         newState = State::Run;
     }
 
+    bool mouseIsDown = false;
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-        newState = State::Attack;
+        mouseIsDown = true;
+        if (mouseIsDown == !mouseWasDown && attacking) {
+            attacking = true;
+            if (attacking) {
+                newState == State::Attack;
+            }
+        }
     }
 
     sf::Vector2f pos = sprite.getPosition();
@@ -42,29 +49,35 @@ void Player::update(float dt, sf::Vector2f bounds) {
     if (pos.y < radius) pos.y = radius;
     if (pos.y > bounds.y - radius) pos.y = bounds.y - radius;
 
+    mouseWasDown = mouseIsDown;
     sprite.setPosition(pos);
     animate(dt, newState);
 }
 
 void Player::animate(float dt, State newState) {
-    state = newState;
-    switch (state) {
-        case State::Idle:
-            sprite.setTexture(*idleTexture);
-            frameCount = idleFrames;
-            break;
-        case State::Run:
-            sprite.setTexture(*runTexture);
-            frameCount = runFrames;
-            break;
-        case State::Attack:
-            sprite.setTexture(*attackTexture);
-            frameCount = attackFrames;
-            break;
-        default:
-            sprite.setTexture(*idleTexture);
-            frameCount = idleFrames;
-            break;
+    if (state != newState) {
+        state = newState;
+        frame = 0;
+        frameTimer = 0;
+
+        switch (state) {
+            case State::Idle:
+                sprite.setTexture(*idleTexture);
+                frameCount = idleFrames;
+                break;
+            case State::Run:
+                sprite.setTexture(*runTexture);
+                frameCount = runFrames;
+                break;
+            case State::Attack:
+                sprite.setTexture(*attackTexture);
+                frameCount = attackFrames;
+                break;
+            default:
+                sprite.setTexture(*idleTexture);
+                frameCount = idleFrames;
+                break;
+        }
     }
 
     frameTimer += dt;

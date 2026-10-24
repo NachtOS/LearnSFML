@@ -24,5 +24,8 @@ private:
     int frame = 0;
     float frameTimer = 0.f;
 
+    bool mouseWasDown = false;
+    bool attacking = false;
+
     void animate(float dt, State state);
 };
