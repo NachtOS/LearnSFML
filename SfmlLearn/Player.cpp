@@ -39,6 +39,7 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
         if (mouseIsDown) {
             if (!mouseWasDown && !attacking) {
                 attacking = true;
+                damageDealt = false;
             }
         }
 
@@ -95,4 +96,24 @@ void Player::animate(float dt, State newState) {
     }
 
     sprite.setTextureRect(sf::IntRect({frame * frameSize.x, 0}, frameSize));
+}
+
+bool Player::shouldHit() {
+    if (state == State::Attack) {
+        if (frame == hitFrame) {
+            damageDealt = true;
+            return damageDealt;
+        }
+    }
+    return damageDealt;
+}
+
+sf::Vector2f Player::attackZone() const {
+    sf::Vector2f playerPos(sprite.getPosition());
+    float offset = 60.f;
+    if (sprite.getScale().x < 0.f) {
+        offset = -80.f;
+    }
+
+    return {playerPos.x + offset, playerPos.y};
 }

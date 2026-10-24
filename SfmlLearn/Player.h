@@ -8,6 +8,8 @@ class Player : public Entity {
 public:
     Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::Texture& attackTex, sf::Vector2f startPos, float speed, float size);
     void update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) override;
+    bool shouldHit();
+    sf::Vector2f attackZone() const;
 
 private:
     const sf::Texture* idleTexture;
@@ -22,10 +24,12 @@ private:
     int frameCount;
     float frameTime;
     int frame = 0;
+    int hitFrame = 3;
     float frameTimer = 0.f;
 
     bool mouseWasDown = false;
     bool attacking = false;
+    bool damageDealt = false;
 
     void animate(float dt, State state);
 };

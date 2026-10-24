@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <random>
+#include <iostream>
 
 #include "Player.h"
 #include "Coin.h"
@@ -124,6 +125,10 @@ int main() {
 
         if (!gameOver) {
             player.update(dt, worldSize, window);
+
+            if (player.shouldHit()) {
+                std::cout << "hit\n";
+            }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
                 if (player.collidesWith(enemies[i])) {
