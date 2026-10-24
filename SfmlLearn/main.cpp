@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <random>
-#include <iostream>
 
 #include "Player.h"
 #include "Coin.h"
@@ -41,7 +40,7 @@ int main() {
     }
 
     Player player(playerIdleTexture, playerRunTexture, playerAttackTexture,
-        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
+        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 15.f);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -57,7 +56,7 @@ int main() {
 
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
-        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f));
+        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f, 50.f));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -87,6 +86,8 @@ int main() {
 
     sf::View view({static_cast<float>(windowSize.x) / 2.f, static_cast<float>(windowSize.y) / 2.f}, {bounds.x, bounds.y});
 
+    constexpr float zoneRadius = 70.f;
+
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
            или когда фпс низкий то не был медленным */
@@ -108,12 +109,12 @@ int main() {
                     scoreText.setString("Score: " + std::to_string(score));
 
                     player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture,
-                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f);
+                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 15.f);
                     coins.clear();
                     enemies.clear();
 
                     for (int i = 0; i < 3; i++) {
-                        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f));
+                        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f, 50.f));
                     }
 
                     for (int i = 0; i < 10; i++) {
@@ -127,7 +128,14 @@ int main() {
             player.update(dt, worldSize, window);
 
             if (player.shouldHit()) {
-                std::cout << "hit\n";
+                for (int i = enemies.size() - 1; i >= 0; --i) {
+                    if (enemies[i].getPosition().x - player.attackZone().x < zoneRadius + player.getRadius()) {
+                        enemies[i].setHealth(enemies[i].getHealth() - player.getDamage());
+                        if (enemies[i].getHealth() <= 0.f) {
+                            enemies.erase(enemies.begin() + i);
+                        }
+                    }
+                }
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
@@ -157,7 +165,7 @@ int main() {
             }
 
             if (enemies.size() < 3) {
-                enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f));
+                enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f, 50.f));
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {

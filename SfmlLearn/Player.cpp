@@ -3,9 +3,10 @@
 #include "Player.h"
 
 Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::Texture& attackTex, sf::Vector2f pos,
-    float speed, float size)
+    float speed, float size, float damage)
     : Entity(idleTex, pos, size, 32.f), idleTexture(&idleTex), runTexture(&runTex), attackTexture(&attackTex),
-    idleFrames(10), runFrames(10), attackFrames(6), speed(speed), frameSize(120, 80), frameCount(idleFrames), frameTime(0.08f) {
+    idleFrames(10), runFrames(10), attackFrames(6), speed(speed), damage(damage), frameSize(120, 80),
+    frameCount(idleFrames), frameTime(0.08f) {
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
@@ -99,21 +100,25 @@ void Player::animate(float dt, State newState) {
 }
 
 bool Player::shouldHit() {
-    if (state == State::Attack) {
+    if (state == State::Attack && !damageDealt) {
         if (frame == hitFrame) {
             damageDealt = true;
             return damageDealt;
         }
     }
-    return damageDealt;
+    return false;
 }
 
 sf::Vector2f Player::attackZone() const {
     sf::Vector2f playerPos(sprite.getPosition());
-    float offset = 60.f;
+    float offset = 80.f;
     if (sprite.getScale().x < 0.f) {
         offset = -80.f;
     }
 
     return {playerPos.x + offset, playerPos.y};
+}
+
+float Player::getDamage() const {
+    return damage;
 }

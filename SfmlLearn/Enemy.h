@@ -4,8 +4,10 @@
 
 class Enemy : public Entity {
 public:
-    Enemy(const sf::Texture& runTex, sf::Vector2f pos, float speed, float size);
+    Enemy(const sf::Texture& runTex, sf::Vector2f pos, float speed, float size, float heath);
     void chase(sf::Vector2f target, float dt);
+    float getHealth() const;
+    void setHealth(float newHealth);
 private:
     const sf::Texture* runTexture;
     sf::Vector2i frameSize;
@@ -15,4 +17,5 @@ private:
     int frame = 0;
     float frameTimer = 0.f;
     float speed;
+    float health;
 };
