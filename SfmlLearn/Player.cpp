@@ -31,11 +31,12 @@ void Player::update(float dt, sf::Vector2f bounds) {
         newState = State::Run;
     }
 
-    bool mouseIsDown = false;
+    bool mouseIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-        mouseIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-        if (mouseIsDown && !mouseWasDown && !attacking) {
-            attacking = true;
+        if (mouseIsDown) {
+            if (!mouseWasDown && !attacking) {
+                attacking = true;
+            }
         }
     }
 
@@ -85,7 +86,7 @@ void Player::animate(float dt, State newState) {
     if (frameTimer >= frameTime) {
         frameTimer -= frameTime;
         frame = (frame + 1) % frameCount;
-        if (frame == 0 && attacking == true) {
+        if (frame == 0 && attacking) {
             attacking = false;
         }
     }
