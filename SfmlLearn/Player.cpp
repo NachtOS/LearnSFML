@@ -32,11 +32,9 @@ void Player::update(float dt, sf::Vector2f bounds) {
     }
 
     bool mouseIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-        if (mouseIsDown) {
-            if (!mouseWasDown && !attacking) {
-                attacking = true;
-            }
+    if (mouseIsDown) {
+        if (!mouseWasDown && !attacking) {
+            attacking = true;
         }
     }
 
