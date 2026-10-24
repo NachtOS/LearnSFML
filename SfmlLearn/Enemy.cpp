@@ -27,7 +27,6 @@ void Enemy::chase(sf::Vector2f target, float dt) {
     if (frameTimer >= frameTime) {
         frameTimer -= frameTime;
         frame = (frame + 1) % frameCount;
-
     }
     sprite.setTextureRect(sf::IntRect({frame * frameSize.x, 0}, frameSize));
 }

@@ -33,13 +33,14 @@ void Player::update(float dt, sf::Vector2f bounds) {
 
     bool mouseIsDown = false;
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-        mouseIsDown = true;
-        if (mouseIsDown == !mouseWasDown && attacking) {
+        mouseIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+        if (mouseIsDown && !mouseWasDown && !attacking) {
             attacking = true;
-            if (attacking) {
-                newState == State::Attack;
-            }
         }
+    }
+
+    if (attacking) {
+        newState = State::Attack;
     }
 
     sf::Vector2f pos = sprite.getPosition();
@@ -84,6 +85,9 @@ void Player::animate(float dt, State newState) {
     if (frameTimer >= frameTime) {
         frameTimer -= frameTime;
         frame = (frame + 1) % frameCount;
+        if (frame == 0 && attacking == true) {
+            attacking = false;
+        }
     }
 
     sprite.setTextureRect(sf::IntRect({frame * frameSize.x, 0}, frameSize));
