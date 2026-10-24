@@ -7,7 +7,7 @@ public:
     Entity(const sf::Texture& texture, sf::Vector2f pos, float size, float hitRadius);
 
     void draw(sf::RenderWindow& window) const;
-    virtual void update(float dt, sf::Vector2f bounds) {}
+    virtual void update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {}
     float getRadius() const;
     bool collidesWith(const Entity& other) const;
     sf::Vector2f getPosition() const;

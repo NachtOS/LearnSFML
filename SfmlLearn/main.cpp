@@ -84,7 +84,7 @@ int main() {
     pressRText.setFillColor(sf::Color::Red);
     pressRText.setPosition({337.f, 300.f});
 
-    sf::View view({windowSize.x / 2.f, windowSize.y / 2.f}, {bounds.x, bounds.y});
+    sf::View view({static_cast<float>(windowSize.x) / 2.f, static_cast<float>(windowSize.y) / 2.f}, {bounds.x, bounds.y});
 
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
@@ -123,7 +123,7 @@ int main() {
         }
 
         if (!gameOver) {
-            player.update(dt, worldSize);
+            player.update(dt, worldSize, window);
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
                 if (player.collidesWith(enemies[i])) {
@@ -179,16 +179,16 @@ int main() {
         window.setView(view);
         window.clear(sf::Color(0, 0, 200));
 
-        for (float i = 0; i <= worldSize.x; i += 100) {
+        for (int i = 0; i <= static_cast<int>(worldSize.x); i += 100) {
             sf::RectangleShape lineX({2.f, worldSize.y});
-            lineX.setPosition({i, 0.f});
+            lineX.setPosition({static_cast<float>(i), 0.f});
             lineX.setFillColor(sf::Color(35, 35, 220));
             window.draw(lineX);
         }
 
-        for (float i = 0; i <= worldSize.y; i += 100) {
+        for (int i = 0; i <= static_cast<int>(worldSize.y); i += 100) {
             sf::RectangleShape lineX({worldSize.x, 2.f});
-            lineX.setPosition({0.f, i});
+            lineX.setPosition({0.f,  static_cast<float>(i)});
             lineX.setFillColor(sf::Color(35, 35, 220));
             window.draw(lineX);
         }

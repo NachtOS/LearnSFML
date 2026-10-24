@@ -9,37 +9,42 @@ Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
-void Player::update(float dt, sf::Vector2f bounds) {
+void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
     State newState = State::Idle;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-        sprite.move({-speed * dt, 0.f});
-        newState = State::Run;
-        sprite.setScale({-std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-        sprite.move({speed * dt, 0.f});
-        newState = State::Run;
-        sprite.setScale({std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-        sprite.move({0.f, -speed * dt});
-        newState = State::Run;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-        sprite.move({0.f, speed * dt});
-        newState = State::Run;
-    }
-
-    bool mouseIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-    if (mouseIsDown) {
-        if (!mouseWasDown && !attacking) {
-            attacking = true;
+    if (!attacking) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+            sprite.move({-speed * dt, 0.f});
+            newState = State::Run;
+            sprite.setScale({-std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+            sprite.move({speed * dt, 0.f});
+            newState = State::Run;
+            sprite.setScale({std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+            sprite.move({0.f, -speed * dt});
+            newState = State::Run;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+            sprite.move({0.f, speed * dt});
+            newState = State::Run;
         }
     }
 
-    if (attacking) {
-        newState = State::Attack;
+    bool mouseIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+    sf::Vector2i mousePosition(sf::Mouse::getPosition(window));
+    if (mousePosition.x <= bounds.x && mousePosition.x >= 0.f && mousePosition.y <= bounds.y && mousePosition.y >= 0.f) {
+        if (mouseIsDown) {
+            if (!mouseWasDown && !attacking) {
+                attacking = true;
+            }
+        }
+
+        if (attacking) {
+            newState = State::Attack;
+        }
     }
 
     sf::Vector2f pos = sprite.getPosition();

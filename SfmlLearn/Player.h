@@ -7,7 +7,7 @@ enum class State { Idle, Run, Attack };
 class Player : public Entity {
 public:
     Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::Texture& attackTex, sf::Vector2f startPos, float speed, float size);
-    void update(float dt, sf::Vector2f bounds) override;
+    void update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) override;
 
 private:
     const sf::Texture* idleTexture;
