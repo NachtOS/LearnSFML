@@ -34,6 +34,11 @@ int main() {
         return -1;
     }
 
+    sf::Texture skullKillTexture;
+    if (!skullKillTexture.loadFromFile("assets/Skull.png")) {
+        return -1;
+    }
+
     sf::Texture coinTexture;
     if (!coinTexture.loadFromFile("assets/coin.png")) {
         return -1;
@@ -58,8 +63,8 @@ int main() {
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> distX(15.f, worldSize.x - 15);
-    std::uniform_real_distribution<float> distY(15.f, worldSize.y - 15);
+    std::uniform_real_distribution<float> distX(15.f, worldSize.x - 15.f);
+    std::uniform_real_distribution<float> distY(15.f, worldSize.y - 15.f);
 
     std::vector<Coin> coins;
     for (int i = 0; i < 10; i++) {
@@ -75,21 +80,25 @@ int main() {
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
-    if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) {
+    if (!font.openFromFile("assets/font/BoldPixels.ttf")) {
         return -1;
     }
 
-    int lives = 3;
+    int kills = 0;
     int score = 0;
     bool gameOver = false;
 
-    sf::Text scoreText(font, "HP: " + std::to_string(player.getHealth()), 16);
+    sf::Text scoreText(font, "Score: " + std::to_string(score), 20);
     scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition({10.f, 10.f});
+    scoreText.setPosition({10.f, 140.f});
 
-    sf::Text livesText(font, "Lives: " + std::to_string(lives), 16);
-    livesText.setFillColor(sf::Color::White);
-    livesText.setPosition({10.f, 25.f});
+    sf::Sprite skullKills(skullKillTexture);
+    skullKills.setScale({1.8f, 1.8f});
+    skullKills.setPosition({10.f, 100.f});
+
+    sf::Text killsText(font, std::to_string(kills), 20);
+    killsText.setFillColor(sf::Color::White);
+    killsText.setPosition({50.f, 100.f});
 
     sf::Text gameOverText(font, "Game Over", 26);
     gameOverText.setFillColor(sf::Color::Red);
@@ -103,6 +112,7 @@ int main() {
 
     constexpr float zoneRadius = 70.f;
     constexpr int divisions = 8;
+    constexpr int hpPerDivision = 10;
 
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
@@ -118,10 +128,10 @@ int main() {
                 }
                 if (key->code == sf::Keyboard::Key::R && gameOver) {
                     score = 0;
-                    lives = 3;
+                    kills = 0;
                     gameOver = false;
 
-                    livesText.setString("Lives: " + std::to_string(lives));
+                    killsText.setString("" + std::to_string(kills));
                     scoreText.setString("Score: " + std::to_string(score));
 
                     player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture,
@@ -151,6 +161,8 @@ int main() {
                         enemies[i].takeDamage(player.getDamage());
                         if (enemies[i].getHealth() <= 0.f) {
                             enemies.erase(enemies.begin() + i);
+                            kills++;
+                            killsText.setString("" + std::to_string(kills));
                         }
                     }
                 }
@@ -159,7 +171,6 @@ int main() {
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
                 if (player.collidesWith(enemies[i])) {
                     player.takeDamage(enemies[i].getDamage());
-                    livesText.setString("HP: " + std::to_string(player.getHealth()));
                     if (player.isDead()) gameOver = true;
                 }
             }
@@ -191,7 +202,6 @@ int main() {
             }
         }
 
-        constexpr int hpPerDivision = 10;
         int frameNumber = (static_cast<int>(player.getHealth()) + hpPerDivision - 1) / hpPerDivision;
         if (frameNumber < 0) {
             frameNumber = 0;
@@ -199,8 +209,8 @@ int main() {
         if (frameNumber > divisions) {
             frameNumber = divisions;
         }
-
-        hpBar.setTextureRect(sf::IntRect({frameNumber * frameW, 0}, {frameW, frameH}));
+        int frameIndex = divisions - frameNumber;
+        hpBar.setTextureRect(sf::IntRect({frameIndex * frameW, 0}, {frameW, frameH}));
 
         sf::Vector2f camPos = player.getPosition();
 
@@ -247,7 +257,8 @@ int main() {
         window.setView(window.getDefaultView());
         window.draw(hpBar);
         window.draw(scoreText);
-        window.draw(livesText);
+        window.draw(skullKills);
+        window.draw(killsText);
 
         if (gameOver) {
             window.draw(gameOverText);
