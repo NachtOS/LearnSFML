@@ -35,6 +35,6 @@ float Enemy::getHealth() const {
     return health;
 }
 
-void Enemy::setHealth(float newHealth) {
-    health -= newHealth;
+void Enemy::takeDamage(float damage) {
+    health -= damage;
 }

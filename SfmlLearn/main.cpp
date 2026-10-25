@@ -129,8 +129,8 @@ int main() {
 
             if (player.shouldHit()) {
                 for (int i = enemies.size() - 1; i >= 0; --i) {
-                    if (enemies[i].getPosition().x - player.attackZone().x < zoneRadius + player.getRadius()) {
-                        enemies[i].setHealth(enemies[i].getHealth() - player.getDamage());
+                    if (enemies[i].getPosition().x - player.attackZone().x < zoneRadius + enemies[i].getRadius()) {
+                        enemies[i].takeDamage(player.getDamage());
                         if (enemies[i].getHealth() <= 0.f) {
                             enemies.erase(enemies.begin() + i);
                         }

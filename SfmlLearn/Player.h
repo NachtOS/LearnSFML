@@ -22,13 +22,13 @@ private:
     int attackFrames;
     State state = State::Idle;
     float speed;
+    float damage;
     sf::Vector2i frameSize;
     int frameCount;
     float frameTime;
     int frame = 0;
     int hitFrame = 3;
     float frameTimer = 0.f;
-    float damage;
     bool mouseWasDown = false;
     bool attacking = false;
     bool damageDealt = false;
