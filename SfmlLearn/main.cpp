@@ -6,6 +6,10 @@
 #include "Coin.h"
 #include "Enemy.h"
 
+constexpr float zoneRadius = 70.f;
+constexpr int divisions = 8;
+constexpr int hpPerDivision = 10;
+
 int main() {
     sf::Vector2u windowSize = {1000, 800};
     const sf::Vector2f bounds(windowSize);
@@ -26,6 +30,11 @@ int main() {
 
     sf::Texture playerAttackTexture;
     if (!playerAttackTexture.loadFromFile("assets/player/_Attack2.png")) {
+        return -1;
+    }
+
+    sf::Texture playerDeathTexture;
+    if (!playerDeathTexture.loadFromFile("assets/player/_Death.png")) {
         return -1;
     }
 
@@ -58,8 +67,8 @@ int main() {
     hpBar.setScale({3.f, 3.f});
     hpBar.setPosition({5.f, 5.f});
 
-    Player player(playerIdleTexture, playerRunTexture, playerAttackTexture,
-        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 80.f, 15.f);
+    Player player(playerIdleTexture, playerRunTexture, playerAttackTexture, playerDeathTexture,
+        {worldSize.x / 2, worldSize.y / 2}, 300.f, 220.f, 80.f, 15.f);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -76,7 +85,7 @@ int main() {
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
         enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng),
-            120.f, 50.f, 10.f));
+            160.f, 50.f, 10.f));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -110,10 +119,6 @@ int main() {
 
     sf::View view({static_cast<float>(windowSize.x) / 2.f, static_cast<float>(windowSize.y) / 2.f}, {bounds.x, bounds.y});
 
-    constexpr float zoneRadius = 70.f;
-    constexpr int divisions = 8;
-    constexpr int hpPerDivision = 10;
-
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
            или когда фпс низкий то не был медленным */
@@ -131,17 +136,17 @@ int main() {
                     kills = 0;
                     gameOver = false;
 
-                    killsText.setString("" + std::to_string(kills));
+                    killsText.setString(std::to_string(kills));
                     scoreText.setString("Score: " + std::to_string(score));
 
-                    player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture,
-                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 80.f,15.f);
+                    player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture, playerDeathTexture,
+                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 220.f, 80.f,15.f);
                     coins.clear();
                     enemies.clear();
 
                     for (int i = 0; i < 3; i++) {
                         enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng),
-                            120.f, 50.f, 10.f));
+                            160.f, 50.f, 10.f));
                     }
 
                     for (int i = 0; i < 10; i++) {
@@ -194,7 +199,7 @@ int main() {
 
             if (enemies.size() < 3) {
                 enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng),
-                    120.f, 50.f, 10.f));
+                    160.f, 50.f, 10.f));
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {

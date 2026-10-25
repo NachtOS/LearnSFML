@@ -2,11 +2,11 @@
 
 #include "Player.h"
 
-Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::Texture& attackTex, sf::Vector2f pos,
-    float speed, float size, float maxHealth, float damage)
-    : Entity(idleTex, pos, size, 32.f), idleTexture(&idleTex), runTexture(&runTex), attackTexture(&attackTex),
-    idleFrames(10), runFrames(10), attackFrames(6), speed(speed), health(maxHealth), maxHealth(maxHealth), damage(damage),
-    frameSize(120, 80), frameCount(idleFrames), frameTime(0.08f) {
+Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::Texture& attackTex, const sf::Texture& deathTex,
+    sf::Vector2f pos, float speed, float size, float maxHealth, float damage)
+    : Entity(idleTex, pos, size, 36.f), idleTexture(&idleTex), runTexture(&runTex), attackTexture(&attackTex),
+    deathTexture(&deathTex), idleFrames(10), runFrames(10), attackFrames(6), deathFrames(10), speed(speed), health(maxHealth),
+    maxHealth(maxHealth), damage(damage), frameSize(120, 80), frameCount(idleFrames), frameTime(0.08f) {
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
@@ -53,6 +53,10 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
         invulnTimer -= dt;
     }
 
+    if (isDead()) {
+        newState = State::Death;
+    }
+
     sf::Vector2f pos = sprite.getPosition();
 
     if (pos.x < radius) pos.x = radius;
@@ -83,6 +87,10 @@ void Player::animate(float dt, State newState) {
             case State::Attack:
                 sprite.setTexture(*attackTexture);
                 frameCount = attackFrames;
+                break;
+            case State::Death:
+                sprite.setTexture(*deathTexture);
+                frameCount = deathFrames;
                 break;
             default:
                 sprite.setTexture(*idleTexture);
@@ -115,9 +123,9 @@ bool Player::shouldHit() {
 
 sf::Vector2f Player::attackZone() const {
     sf::Vector2f playerPos(sprite.getPosition());
-    float offset = 80.f;
+    float offset = 60.f;
     if (sprite.getScale().x < 0.f) {
-        offset = -80.f;
+        offset = -60.f;
     }
 
     return {playerPos.x + offset, playerPos.y};
