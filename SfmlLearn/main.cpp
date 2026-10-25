@@ -45,7 +45,7 @@ int main() {
     }
 
     sf::Vector2u sheetSize = hpBarTexture.getSize();
-    int frameW = static_cast<int>(sheetSize.x) / 2;
+    int frameW = static_cast<int>(sheetSize.x) / 9;
     int frameH = static_cast<int>(sheetSize.y);
 
     sf::Sprite hpBar(hpBarTexture);
@@ -102,7 +102,6 @@ int main() {
     sf::View view({static_cast<float>(windowSize.x) / 2.f, static_cast<float>(windowSize.y) / 2.f}, {bounds.x, bounds.y});
 
     constexpr float zoneRadius = 70.f;
-    constexpr int hpPerDivision = 10;
     constexpr int divisions = 8;
 
     while (window.isOpen()) {
@@ -191,6 +190,17 @@ int main() {
                 enemies[i].chase(player.getPosition(), dt);
             }
         }
+
+        constexpr int hpPerDivision = 10;
+        int frameNumber = (static_cast<int>(player.getHealth()) + hpPerDivision - 1) / hpPerDivision;
+        if (frameNumber < 0) {
+            frameNumber = 0;
+        }
+        if (frameNumber > divisions) {
+            frameNumber = divisions;
+        }
+
+        hpBar.setTextureRect(sf::IntRect({frameNumber * frameW, 0}, {frameW, frameH}));
 
         sf::Vector2f camPos = player.getPosition();
 
