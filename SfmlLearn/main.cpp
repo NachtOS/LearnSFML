@@ -39,6 +39,20 @@ int main() {
         return -1;
     }
 
+    sf::Texture hpBarTexture;
+    if (!hpBarTexture.loadFromFile("assets/HUD/hp_bar.png")) {
+        return -1;
+    }
+
+    sf::Vector2u sheetSize = hpBarTexture.getSize();
+    int frameW = static_cast<int>(sheetSize.x) / 2;
+    int frameH = static_cast<int>(sheetSize.y);
+
+    sf::Sprite hpBar(hpBarTexture);
+    hpBar.setTextureRect(sf::IntRect({0, 0}, {frameW, frameH}));
+    hpBar.setScale({3.f, 3.f});
+    hpBar.setPosition({5.f, 5.f});
+
     Player player(playerIdleTexture, playerRunTexture, playerAttackTexture,
         {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 80.f, 15.f);
     sf::Clock clock;
@@ -69,7 +83,7 @@ int main() {
     int score = 0;
     bool gameOver = false;
 
-    sf::Text scoreText(font, "Score: " + std::to_string(score), 16);
+    sf::Text scoreText(font, "HP: " + std::to_string(player.getHealth()), 16);
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition({10.f, 10.f});
 
@@ -88,6 +102,8 @@ int main() {
     sf::View view({static_cast<float>(windowSize.x) / 2.f, static_cast<float>(windowSize.y) / 2.f}, {bounds.x, bounds.y});
 
     constexpr float zoneRadius = 70.f;
+    constexpr int hpPerDivision = 10;
+    constexpr int divisions = 8;
 
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
@@ -144,6 +160,7 @@ int main() {
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
                 if (player.collidesWith(enemies[i])) {
                     player.takeDamage(enemies[i].getDamage());
+                    livesText.setString("HP: " + std::to_string(player.getHealth()));
                     if (player.isDead()) gameOver = true;
                 }
             }
@@ -218,6 +235,7 @@ int main() {
 
         player.draw(window);
         window.setView(window.getDefaultView());
+        window.draw(hpBar);
         window.draw(scoreText);
         window.draw(livesText);
 

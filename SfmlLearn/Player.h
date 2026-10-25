@@ -31,7 +31,7 @@ private:
     float maxHealth;
     float damage;
     float invulnDuration = 1.f;
-    float invulnTimer = 1.f;
+    float invulnTimer = 0.f;
 
     // Animation
     State state = State::Idle;

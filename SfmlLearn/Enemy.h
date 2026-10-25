@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 
+//enum class State { Idle, Walk, Attack };
+
 class Enemy : public Entity {
 public:
     Enemy(const sf::Texture& runTex, sf::Vector2f pos, float speed, float size, float health, float damage);
