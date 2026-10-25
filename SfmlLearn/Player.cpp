@@ -3,10 +3,10 @@
 #include "Player.h"
 
 Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::Texture& attackTex, sf::Vector2f pos,
-    float speed, float size, float damage)
+    float speed, float size, float maxHealth, float damage)
     : Entity(idleTex, pos, size, 32.f), idleTexture(&idleTex), runTexture(&runTex), attackTexture(&attackTex),
-    idleFrames(10), runFrames(10), attackFrames(6), speed(speed), damage(damage), frameSize(120, 80),
-    frameCount(idleFrames), frameTime(0.08f) {
+    idleFrames(10), runFrames(10), attackFrames(6), speed(speed), health(maxHealth), maxHealth(maxHealth), damage(damage),
+    frameSize(120, 80), frameCount(idleFrames), frameTime(0.08f) {
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
@@ -47,6 +47,10 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
         if (attacking) {
             newState = State::Attack;
         }
+    }
+
+    if (invulnTimer > 0.f) {
+        invulnTimer -= dt;
     }
 
     sf::Vector2f pos = sprite.getPosition();
@@ -121,4 +125,25 @@ sf::Vector2f Player::attackZone() const {
 
 float Player::getDamage() const {
     return damage;
+}
+
+float Player::getHealth() const {
+    return health;
+}
+
+void Player::takeDamage(float takeDamage) {
+    if (invulnTimer > 0.f) {
+        return;
+    }
+    if (invulnTimer <= 0.f) {
+        invulnTimer = invulnDuration;
+        health -= takeDamage;
+    }
+}
+
+bool Player::isDead() const {
+    if (health <= 0) {
+        return true;
+    }
+    return false;
 }

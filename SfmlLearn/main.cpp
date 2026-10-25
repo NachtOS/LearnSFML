@@ -40,7 +40,7 @@ int main() {
     }
 
     Player player(playerIdleTexture, playerRunTexture, playerAttackTexture,
-        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 15.f);
+        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 80.f, 15.f);
     sf::Clock clock;
 
     std::mt19937 rng(std::random_device{}());
@@ -56,7 +56,8 @@ int main() {
 
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
-        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f, 50.f));
+        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng),
+            120.f, 50.f, 10.f));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -109,12 +110,13 @@ int main() {
                     scoreText.setString("Score: " + std::to_string(score));
 
                     player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture,
-                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 15.f);
+                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 180.f, 80.f,15.f);
                     coins.clear();
                     enemies.clear();
 
                     for (int i = 0; i < 3; i++) {
-                        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f, 50.f));
+                        enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng),
+                            120.f, 50.f, 10.f));
                     }
 
                     for (int i = 0; i < 10; i++) {
@@ -141,10 +143,8 @@ int main() {
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
                 if (player.collidesWith(enemies[i])) {
-                    enemies.erase(enemies.begin() + i);
-                    --lives;
-                    livesText.setString("Lives: " + std::to_string(lives));
-                    if (lives == 0) gameOver = true;
+                    player.takeDamage(enemies[i].getDamage());
+                    if (player.isDead()) gameOver = true;
                 }
             }
 
@@ -166,7 +166,8 @@ int main() {
             }
 
             if (enemies.size() < 3) {
-                enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng), 120.f, 50.f));
+                enemies.push_back(Enemy(enemyRunTexture, {distX(rng), distY(rng)}, distSpeed(rng),
+                    120.f, 50.f, 10.f));
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {

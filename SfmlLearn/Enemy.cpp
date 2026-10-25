@@ -2,9 +2,9 @@
 
 #include "Enemy.h"
 
-Enemy::Enemy(const sf::Texture& runTex, sf::Vector2f pos, float speed, float size, float health)
+Enemy::Enemy(const sf::Texture& runTex, sf::Vector2f pos, float speed, float size, float health, float damage)
     : Entity(runTex, pos, size, 18.f), runTexture(&runTex), frameSize(96, 64), runFrames(10),
-    frameCount(runFrames), frameTime(0.08f), speed(speed), health(health) {
+    frameCount(runFrames), frameTime(0.08f), speed(speed), health(health), damage(damage) {
     setFrame(sf::IntRect({0, 0}, frameSize), size);
 }
 
@@ -33,6 +33,10 @@ void Enemy::chase(sf::Vector2f target, float dt) {
 
 float Enemy::getHealth() const {
     return health;
+}
+
+float Enemy::getDamage() const {
+    return damage;
 }
 
 void Enemy::takeDamage(float damage) {
