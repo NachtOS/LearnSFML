@@ -129,7 +129,8 @@ int main() {
 
             if (player.shouldHit()) {
                 for (int i = enemies.size() - 1; i >= 0; --i) {
-                    if (enemies[i].getPosition().x - player.attackZone().x < zoneRadius + enemies[i].getRadius()) {
+                    sf::Vector2f toEnemy = enemies[i].getPosition() - player.attackZone();
+                    if (toEnemy.length() < zoneRadius + enemies[i].getRadius()) {
                         enemies[i].takeDamage(player.getDamage());
                         if (enemies[i].getHealth() <= 0.f) {
                             enemies.erase(enemies.begin() + i);
