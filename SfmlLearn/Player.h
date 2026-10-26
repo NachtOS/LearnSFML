@@ -10,7 +10,8 @@ public:
         sf::Vector2f startPos, float speed, float size, float maxHealth, float damage);
     void update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) override;
     bool shouldHit();
-    bool isDead() const;
+    bool isDeath() const;
+    bool isDeathFinished() const;
     sf::Vector2f attackZone() const;
     float getDamage() const;
     float getHealth() const;
@@ -34,6 +35,7 @@ private:
     float damage;
     float invulnDuration = 1.f;
     float invulnTimer = 0.f;
+    bool death;
 
     // Animation
     State state = State::Idle;

@@ -159,6 +159,10 @@ int main() {
         if (!gameOver) {
             player.update(dt, worldSize, window);
 
+            if (player.isDeath() && player.isDeathFinished()) {
+                gameOver = true;
+            }
+
             if (player.shouldHit()) {
                 for (int i = enemies.size() - 1; i >= 0; --i) {
                     sf::Vector2f toEnemy = enemies[i].getPosition() - player.attackZone();
@@ -176,7 +180,6 @@ int main() {
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
                 if (player.collidesWith(enemies[i])) {
                     player.takeDamage(enemies[i].getDamage());
-                    if (player.isDead()) gameOver = true;
                 }
             }
 

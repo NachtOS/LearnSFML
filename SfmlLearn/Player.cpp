@@ -13,6 +13,10 @@ Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::
 void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
     State newState = State::Idle;
 
+    if (isDeath()) {
+        newState = State::Death;
+    }
+
     if (!attacking) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
             sprite.move({-speed * dt, 0.f});
@@ -53,10 +57,6 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
         invulnTimer -= dt;
     }
 
-    if (isDead()) {
-        newState = State::Death;
-    }
-
     sf::Vector2f pos = sprite.getPosition();
 
     if (pos.x < radius) pos.x = radius;
@@ -91,7 +91,9 @@ void Player::animate(float dt, State newState) {
             case State::Death:
                 sprite.setTexture(*deathTexture);
                 frameCount = deathFrames;
-                break;
+                if (death && frameCount - 1) {
+                    break;
+                }
             default:
                 sprite.setTexture(*idleTexture);
                 frameCount = idleFrames;
@@ -149,8 +151,15 @@ void Player::takeDamage(float takeDamage) {
     }
 }
 
-bool Player::isDead() const {
+bool Player::isDeath() const {
     if (health <= 0) {
+        return true;
+    }
+    return false;
+}
+
+bool Player::isDeathFinished() const {
+    if (death && frameCount - 1) {
         return true;
     }
     return false;
