@@ -171,7 +171,7 @@ int main() {
                         if (enemies[i].getHealth() <= 0.f) {
                             enemies.erase(enemies.begin() + i);
                             kills++;
-                            killsText.setString("" + std::to_string(kills));
+                            killsText.setString(std::to_string(kills));
                         }
                     }
                 }

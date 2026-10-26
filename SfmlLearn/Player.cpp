@@ -102,9 +102,6 @@ void Player::animate(float dt, State newState) {
     }
 
     frameTimer += dt;
-    if (!(state == State::Death && frame == frameCount - 1)) {
-
-    }
     if (frameTimer >= frameTime) {
         frameTimer -= frameTime;
         if (!(state == State::Death && frame == frameCount - 1)) {

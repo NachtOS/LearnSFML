@@ -10,7 +10,7 @@ Enemy::Enemy(const sf::Texture& runTex, sf::Vector2f pos, float speed, float siz
 
 void Enemy::chase(sf::Vector2f target, float dt) {
     sf::Vector2f toTarget = target - sprite.getPosition();
-    if (toTarget.length() > 0.f) {
+    if (toTarget.length() > 50.f) {
         // normalized() делает вектор длиной 1, чтобы враг шёл с одной скоростью, неважно, далеко игрок или близко
         sf::Vector2f dir = toTarget.normalized();
         sprite.move(dir * speed * dt);
