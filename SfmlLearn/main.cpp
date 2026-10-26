@@ -89,9 +89,18 @@ int main() {
         return -1;
     }
 
+    sf::Texture grassTexture;
+    if (!grassTexture.loadFromFile("assets/grass.png")) {
+        return -1;
+    }
+    grassTexture.setRepeated(true);
+
     sf::Vector2u sheetSize = hpBarTexture.getSize();
     int frameW = static_cast<int>(sheetSize.x) / 9;
     int frameH = static_cast<int>(sheetSize.y);
+
+    sf::Sprite grass(grassTexture);
+    grass.setTextureRect(sf::IntRect({}, {static_cast<int>(worldSize.x), static_cast<int>(worldSize.y)}));
 
     sf::Sprite hpBar(hpBarTexture);
     hpBar.setTextureRect(sf::IntRect({0, 0}, {frameW, frameH}));
@@ -327,20 +336,7 @@ int main() {
         view.setCenter(camPos);
         window.setView(view);
         window.clear(sf::Color(0, 0, 200));
-
-        for (int i = 0; i <= static_cast<int>(worldSize.x); i += 100) {
-            sf::RectangleShape lineX({2.f, worldSize.y});
-            lineX.setPosition({static_cast<float>(i), 0.f});
-            lineX.setFillColor(sf::Color(35, 35, 220));
-            window.draw(lineX);
-        }
-
-        for (int i = 0; i <= static_cast<int>(worldSize.y); i += 100) {
-            sf::RectangleShape lineX({worldSize.x, 2.f});
-            lineX.setPosition({0.f,  static_cast<float>(i)});
-            lineX.setFillColor(sf::Color(35, 35, 220));
-            window.draw(lineX);
-        }
+        window.draw(grass);
 
         for (const Coin& coin : coins) {
             coin.draw(window);
