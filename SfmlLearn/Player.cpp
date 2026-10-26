@@ -15,6 +15,8 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
 
     if (isDeath()) {
         newState = State::Death;
+        animate(dt, newState);
+        return;
     }
 
     if (!attacking) {
@@ -91,9 +93,7 @@ void Player::animate(float dt, State newState) {
             case State::Death:
                 sprite.setTexture(*deathTexture);
                 frameCount = deathFrames;
-                if (death && frameCount - 1) {
-                    break;
-                }
+                break;
             default:
                 sprite.setTexture(*idleTexture);
                 frameCount = idleFrames;
@@ -102,9 +102,14 @@ void Player::animate(float dt, State newState) {
     }
 
     frameTimer += dt;
+    if (!(state == State::Death && frame == frameCount - 1)) {
+
+    }
     if (frameTimer >= frameTime) {
         frameTimer -= frameTime;
-        frame = (frame + 1) % frameCount;
+        if (!(state == State::Death && frame == frameCount - 1)) {
+            frame = (frame + 1) % frameCount;
+        }
         if (frame == 0 && attacking) {
             attacking = false;
         }
@@ -159,7 +164,7 @@ bool Player::isDeath() const {
 }
 
 bool Player::isDeathFinished() const {
-    if (death && frameCount - 1) {
+    if (state == State::Death && frame == frameCount - 1) {
         return true;
     }
     return false;

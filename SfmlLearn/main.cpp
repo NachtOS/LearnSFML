@@ -178,7 +178,7 @@ int main() {
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
-                if (player.collidesWith(enemies[i])) {
+                if (player.collidesWith(enemies[i]) && !player.isDeath()) {
                     player.takeDamage(enemies[i].getDamage());
                 }
             }
