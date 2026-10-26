@@ -69,6 +69,11 @@ int main() {
         return -1;
     }
 
+    sf::Texture buttonTexture;
+    if (!buttonTexture.loadFromFile("assets/HUD/button.png")) {
+        return -1;
+    }
+
     sf::Vector2u sheetSize = hpBarTexture.getSize();
     int frameW = static_cast<int>(sheetSize.x) / 9;
     int frameH = static_cast<int>(sheetSize.y);
@@ -77,6 +82,26 @@ int main() {
     hpBar.setTextureRect(sf::IntRect({0, 0}, {frameW, frameH}));
     hpBar.setScale({3.f, 3.f});
     hpBar.setPosition({5.f, 5.f});
+
+    sf::Sprite buttonResume(buttonTexture);
+    buttonResume.setScale({1.5f, 1.5f});
+    buttonResume.setPosition({30.f, 220.f});
+
+    sf::Sprite buttonRestart(buttonTexture);
+    buttonRestart.setScale({1.5f, 1.5f});
+    buttonRestart.setPosition({30.f, 340.f});
+
+    sf::Sprite buttonExitToMainMenu(buttonTexture);
+    buttonExitToMainMenu.setScale({1.5f, 1.5f});
+    buttonExitToMainMenu.setPosition({30.f, 460.f});
+
+    sf::Sprite buttonPlay(buttonTexture);
+    buttonPlay.setScale({1.5f, 1.5f});
+    buttonPlay.setPosition({30.f, 220.f});
+
+    sf::Sprite buttonExitTheGame(buttonTexture);
+    buttonExitTheGame.setScale({1.5f, 1.5f});
+    buttonExitTheGame.setPosition({30.f, 340.f});
 
     Player player(playerIdleTexture, playerRunTexture, playerAttackTexture, playerDeathTexture,
         {worldSize.x / 2, worldSize.y / 2}, 300.f, 220.f, 80.f, 15.f);
@@ -98,7 +123,7 @@ int main() {
         enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, enemyIdleTexture, {distX(rng), distY(rng)},
             distSpeed(rng), 160.f, 50.f, 10.f));
     }
-    // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
+
     sf::Font font;
     if (!font.openFromFile("assets/font/BoldPixels.ttf")) {
         return -1;
@@ -106,29 +131,76 @@ int main() {
 
     int kills = 0;
     int score = 0;
-    bool gameOver = false;
-
-    sf::Text scoreText(font, "Score: " + std::to_string(score), 20);
-    scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition({10.f, 140.f});
 
     sf::Sprite skullKills(skullKillTexture);
     skullKills.setScale({1.8f, 1.8f});
     skullKills.setPosition({10.f, 100.f});
 
+    sf::Text scoreText(font, "Score: " + std::to_string(score), 20);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setOutlineColor(sf::Color::Black);
+    scoreText.setOutlineThickness(1.f);
+    scoreText.setPosition({10.f, 140.f});
+
     sf::Text killsText(font, std::to_string(kills), 20);
     killsText.setFillColor(sf::Color::White);
+    killsText.setOutlineColor(sf::Color::Black);
+    killsText.setOutlineThickness(1.f);
     killsText.setPosition({50.f, 100.f});
 
-    sf::Text gameOverText(font, "Game Over", 26);
+    sf::Text gameOverText(font, "Game Over", 50);
     gameOverText.setFillColor(sf::Color::Red);
-    gameOverText.setPosition({340.f, 270.f});
+    gameOverText.setOutlineColor(sf::Color::Black);
+    gameOverText.setOutlineThickness(1.f);
+    gameOverText.setPosition({40.f, 260.f});
 
-    sf::Text pressRText(font, "Press R to restart", 18);
-    pressRText.setFillColor(sf::Color::Red);
-    pressRText.setPosition({337.f, 300.f});
+    sf::Text menuPauseText(font, "Pause", 75);
+    menuPauseText.setFillColor(sf::Color::Red);
+    menuPauseText.setOutlineColor(sf::Color::Black);
+    menuPauseText.setOutlineThickness(1.f);
+    menuPauseText.setPosition({40.f, 120.f});
+
+    sf::Text huntText(font, "HUNT", 150);
+    huntText.setFillColor(sf::Color(143, 13, 22));
+    huntText.setOutlineColor(sf::Color::Black);
+    huntText.setOutlineThickness(2.f);
+    huntText.setPosition({40.f, 30.f});
+
+    sf::Text playText(font, "Play", 32);
+    playText.setFillColor(sf::Color::White);
+    playText.setOutlineColor(sf::Color::Black);
+    playText.setOutlineThickness(1.f);
+    playText.setPosition({120.f, 240.f});
+
+    sf::Text exitText(font, "Exit", 32);
+    exitText.setFillColor(sf::Color::White);
+    exitText.setOutlineColor(sf::Color::Black);
+    exitText.setOutlineThickness(1.f);
+    exitText.setPosition({120.f, 360.f});
+
+    sf::Text resumeText(font, "Resume", 32);
+    resumeText.setFillColor(sf::Color::White);
+    resumeText.setOutlineColor(sf::Color::Black);
+    resumeText.setOutlineThickness(1.f);
+    resumeText.setPosition({105.f, 240.f});
+
+    sf::Text restartText(font, "Restart", 32);
+    restartText.setFillColor(sf::Color::White);
+    restartText.setOutlineColor(sf::Color::Black);
+    restartText.setOutlineThickness(1.f);
+    restartText.setPosition({100.f, 360.f});
+
+    sf::Text mainMenuText(font, "Main Menu", 32);
+    mainMenuText.setFillColor(sf::Color::White);
+    mainMenuText.setOutlineColor(sf::Color::Black);
+    mainMenuText.setOutlineThickness(1.f);
+    mainMenuText.setPosition({90.f, 480.f});
 
     sf::View view({static_cast<float>(windowSize.x) / 2.f, static_cast<float>(windowSize.y) / 2.f}, {bounds.x, bounds.y});
+
+    bool gameOver = false;
+    bool inMainMenu = true;
+    bool inPauseMenu = false;
 
     while (window.isOpen()) {
         /* скорость умножается на dt чтобы когда у пользователя фпс высокий то он не был быстрее чем задумано
@@ -139,35 +211,13 @@ int main() {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             } else if (const auto* key = event->getIf<sf::Event::KeyPressed>()) {
-                if (key->code == sf::Keyboard::Key::Escape) {
-                    window.close();
-                }
-                if (key->code == sf::Keyboard::Key::R && gameOver) {
-                    score = 0;
-                    kills = 0;
-                    gameOver = false;
-
-                    killsText.setString(std::to_string(kills));
-                    scoreText.setString("Score: " + std::to_string(score));
-
-                    player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture, playerDeathTexture,
-                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 220.f, 80.f,15.f);
-                    coins.clear();
-                    enemies.clear();
-
-                    for (int i = 0; i < 3; i++) {
-                        enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, enemyIdleTexture, {distX(rng), distY(rng)},
-                            distSpeed(rng), 160.f, 50.f, 10.f));
-                    }
-
-                    for (int i = 0; i < 10; i++) {
-                        coins.push_back(Coin(coinTexture, {distX(rng), distY(rng)}));
-                    }
+                if (key->code == sf::Keyboard::Key::Escape && !inPauseMenu) {
+                    inPauseMenu = true;
                 }
             }
         }
 
-        if (!gameOver) {
+        if (!gameOver && !inPauseMenu && !inMainMenu) {
             player.update(dt, worldSize, window);
 
             if (player.isDeath() && player.isDeathFinished()) {
@@ -228,6 +278,7 @@ int main() {
         if (frameNumber > divisions) {
             frameNumber = divisions;
         }
+
         int frameIndex = divisions - frameNumber;
         hpBar.setTextureRect(sf::IntRect({frameIndex * frameW, 0}, {frameW, frameH}));
 
@@ -280,8 +331,121 @@ int main() {
         window.draw(killsText);
 
         if (gameOver) {
+            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+            sf::Vector2f mousePosition = window.mapPixelToCoords(mousePos);
+
+            if (buttonRestart.getGlobalBounds().contains(mousePosition)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    gameOver = false;
+                    score = 0;
+                    kills = 0;
+
+                    killsText.setString(std::to_string(kills));
+                    scoreText.setString("Score: " + std::to_string(score));
+
+                    player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture, playerDeathTexture,
+                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 220.f, 80.f,15.f);
+                    coins.clear();
+                    enemies.clear();
+
+                    for (int i = 0; i < 3; i++) {
+                        enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, enemyIdleTexture, {distX(rng), distY(rng)},
+                            distSpeed(rng), 160.f, 50.f, 10.f));
+                    }
+
+                    for (int i = 0; i < 10; i++) {
+                        coins.push_back(Coin(coinTexture, {distX(rng), distY(rng)}));
+                    }
+                }
+            }
+
+            if (buttonExitToMainMenu.getGlobalBounds().contains(mousePosition)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    gameOver = false;
+                    inMainMenu = true;
+                }
+            }
+
+            window.clear(sf::Color(138, 106, 106));
+            window.draw(buttonRestart);
+            window.draw(buttonExitToMainMenu);
             window.draw(gameOverText);
-            window.draw(pressRText);
+            window.draw(restartText);
+            window.draw(mainMenuText);
+        }
+
+        if (!gameOver && inPauseMenu && !inMainMenu) {
+            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+            sf::Vector2f mousePosition = window.mapPixelToCoords(mousePos);
+
+            if (buttonResume.getGlobalBounds().contains(mousePosition)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    inPauseMenu = false;
+                }
+            }
+
+            if (buttonRestart.getGlobalBounds().contains(mousePosition)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    inPauseMenu = false;
+                    score = 0;
+                    kills = 0;
+
+                    killsText.setString(std::to_string(kills));
+                    scoreText.setString("Score: " + std::to_string(score));
+
+                    player = Player(playerIdleTexture, playerRunTexture, playerAttackTexture, playerDeathTexture,
+                        {worldSize.x / 2, worldSize.y / 2}, 300.f, 220.f, 80.f,15.f);
+                    coins.clear();
+                    enemies.clear();
+
+                    for (int i = 0; i < 3; i++) {
+                        enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, enemyIdleTexture, {distX(rng), distY(rng)},
+                            distSpeed(rng), 160.f, 50.f, 10.f));
+                    }
+
+                    for (int i = 0; i < 10; i++) {
+                        coins.push_back(Coin(coinTexture, {distX(rng), distY(rng)}));
+                    }
+                }
+            }
+
+            if (buttonExitToMainMenu.getGlobalBounds().contains(mousePosition)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    inPauseMenu = false;
+                    inMainMenu = true;
+                }
+            }
+
+            window.clear(sf::Color(50, 150, 100, 50));
+            window.draw(buttonResume);
+            window.draw(buttonRestart);
+            window.draw(buttonExitToMainMenu);
+            window.draw(resumeText);
+            window.draw(restartText);
+            window.draw(mainMenuText);
+            window.draw(menuPauseText);
+        } else if (!gameOver && inMainMenu && !inPauseMenu) {
+            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+            sf::Vector2f mousePosition = window.mapPixelToCoords(mousePos);
+
+            if (buttonPlay.getGlobalBounds().contains(mousePosition)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    inMainMenu = false;
+                }
+            }
+
+            if (buttonExitTheGame.getGlobalBounds().contains(mousePosition)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    window.close();
+                }
+            }
+
+            window.clear(sf::Color(56, 56, 56));
+            window.draw(buttonPlay);
+            window.draw(buttonExitTheGame);
+            window.draw(playText);
+            window.draw(exitText);
+            window.draw(huntText);
         }
 
         window.display();
