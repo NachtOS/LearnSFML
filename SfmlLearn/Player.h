@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-enum class State { Idle, Run, Attack, Death };
+enum class PlayerState { Idle, Run, Attack, Death };
 
 class Player : public Entity {
 public:
@@ -37,7 +37,7 @@ private:
     float invulnTimer = 0.f;
 
     // Animation
-    State state = State::Idle;
+    PlayerState state = PlayerState::Idle;
     sf::Vector2i frameSize;
     int frameCount;
     int frame = 0;
@@ -50,5 +50,5 @@ private:
     bool attacking = false;
     bool damageDealt = false;
 
-    void animate(float dt, State state);
+    void animate(float dt, PlayerState state);
 };

@@ -11,10 +11,10 @@ Player::Player(const sf::Texture& idleTex, const sf::Texture& runTex, const sf::
 }
 
 void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
-    State newState = State::Idle;
+    PlayerState newState = PlayerState::Idle;
 
     if (isDeath()) {
-        newState = State::Death;
+        newState = PlayerState::Death;
         animate(dt, newState);
         return;
     }
@@ -22,21 +22,21 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
     if (!attacking) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
             sprite.move({-speed * dt, 0.f});
-            newState = State::Run;
+            newState = PlayerState::Run;
             sprite.setScale({-std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
             sprite.move({speed * dt, 0.f});
-            newState = State::Run;
+            newState = PlayerState::Run;
             sprite.setScale({std::abs(sprite.getScale().x), std::abs(sprite.getScale().y)});
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
             sprite.move({0.f, -speed * dt});
-            newState = State::Run;
+            newState = PlayerState::Run;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
             sprite.move({0.f, speed * dt});
-            newState = State::Run;
+            newState = PlayerState::Run;
         }
     }
 
@@ -51,7 +51,7 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
         }
 
         if (attacking) {
-            newState = State::Attack;
+            newState = PlayerState::Attack;
         }
     }
 
@@ -71,26 +71,26 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
     animate(dt, newState);
 }
 
-void Player::animate(float dt, State newState) {
+void Player::animate(float dt, PlayerState newState) {
     if (state != newState) {
         state = newState;
         frame = 0;
         frameTimer = 0;
 
         switch (state) {
-            case State::Idle:
+            case PlayerState::Idle:
                 sprite.setTexture(*idleTexture);
                 frameCount = idleFrames;
                 break;
-            case State::Run:
+            case PlayerState::Run:
                 sprite.setTexture(*runTexture);
                 frameCount = runFrames;
                 break;
-            case State::Attack:
+            case PlayerState::Attack:
                 sprite.setTexture(*attackTexture);
                 frameCount = attackFrames;
                 break;
-            case State::Death:
+            case PlayerState::Death:
                 sprite.setTexture(*deathTexture);
                 frameCount = deathFrames;
                 break;
@@ -104,7 +104,7 @@ void Player::animate(float dt, State newState) {
     frameTimer += dt;
     if (frameTimer >= frameTime) {
         frameTimer -= frameTime;
-        if (!(state == State::Death && frame == frameCount - 1)) {
+        if (!(state == PlayerState::Death && frame == frameCount - 1)) {
             frame = (frame + 1) % frameCount;
         }
         if (frame == 0 && attacking) {
@@ -116,7 +116,7 @@ void Player::animate(float dt, State newState) {
 }
 
 bool Player::shouldHit() {
-    if (state == State::Attack && !damageDealt) {
+    if (state == PlayerState::Attack && !damageDealt) {
         if (frame == hitFrame) {
             damageDealt = true;
             return damageDealt;
@@ -161,7 +161,7 @@ bool Player::isDeath() const {
 }
 
 bool Player::isDeathFinished() const {
-    if (state == State::Death && frame == frameCount - 1) {
+    if (state == PlayerState::Death && frame == frameCount - 1) {
         return true;
     }
     return false;

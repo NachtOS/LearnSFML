@@ -2,20 +2,23 @@
 
 #include "Entity.h"
 
-//enum class State { Idle, Walk, Attack };
+enum class EnemyState { Idle, Walk, Attack, Death };
 
 class Enemy : public Entity {
 public:
-    Enemy(const sf::Texture& runTex, sf::Vector2f pos, float speed, float size, float health, float damage);
+    Enemy(const sf::Texture& walkTex, const sf::Texture& attackTex, sf::Vector2f pos, float speed, float size, float health, float damage);
     void chase(sf::Vector2f target, float dt);
     float getHealth() const;
     float getDamage() const;
     void takeDamage(float damage);
 
 private:
-    const sf::Texture* runTexture;
+    const sf::Texture* walkTexture;
+    const sf::Texture* attackTexture;
+    int walkFrames;
+    int attackFrames;
+    EnemyState state = EnemyState::Idle;
     sf::Vector2i frameSize;
-    int runFrames;
     int frameCount;
     float frameTime;
     int frame = 0;
