@@ -7,6 +7,7 @@
 #include "Enemy.h"
 
 constexpr float zoneRadius = 70.f;
+constexpr float reachZone = 70.f;
 constexpr int divisions = 8;
 constexpr int hpPerDivision = 10;
 
@@ -188,7 +189,7 @@ int main() {
             }
 
             for (int i = static_cast<int>(enemies.size()) - 1; i >= 0; --i) {
-                if (player.collidesWith(enemies[i]) && !player.isDeath()) {
+                if (enemies[i].shouldHit() && player.collidesWith(enemies[i]) < reachZone && !player.isDeath()) {
                     player.takeDamage(enemies[i].getDamage());
                 }
             }

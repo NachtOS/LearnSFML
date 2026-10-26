@@ -55,10 +55,6 @@ void Player::update(float dt, sf::Vector2f bounds, sf::RenderWindow& window) {
         }
     }
 
-    if (invulnTimer > 0.f) {
-        invulnTimer -= dt;
-    }
-
     sf::Vector2f pos = sprite.getPosition();
 
     if (pos.x < radius) pos.x = radius;
@@ -144,13 +140,7 @@ float Player::getHealth() const {
 }
 
 void Player::takeDamage(float takeDamage) {
-    if (invulnTimer > 0.f) {
-        return;
-    }
-    if (invulnTimer <= 0.f) {
-        invulnTimer = invulnDuration;
-        health -= takeDamage;
-    }
+    health -= takeDamage;
 }
 
 bool Player::isDeath() const {

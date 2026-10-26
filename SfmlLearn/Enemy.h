@@ -11,6 +11,7 @@ public:
     float getHealth() const;
     float getDamage() const;
     void takeDamage(float damage);
+    bool shouldHit();
 
 private:
     const sf::Texture* walkTexture;
@@ -22,12 +23,14 @@ private:
     EnemyState state = EnemyState::Idle;
     sf::Vector2i frameSize;
     int frameCount;
-    float frameTime;
     int frame = 0;
+    int hitFrame = 6;
+    float frameTime;
     float frameTimer = 0.f;
     float speed;
     float health;
     float damage;
     float cooldown = 0.f;
     bool attackDone = false;
+    bool damageDealt = false;
 };

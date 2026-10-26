@@ -39,6 +39,7 @@ void Enemy::chase(sf::Vector2f target, float dt) {
     if (attackDone) {
         attackDone = false;
         cooldown = 1.f;
+        damageDealt = false;
     }
 
     if (newState == EnemyState::Attack && frame != attackFrames) {
@@ -94,4 +95,14 @@ float Enemy::getDamage() const {
 
 void Enemy::takeDamage(float takeDamage) {
     health -= takeDamage;
+}
+
+bool Enemy::shouldHit() {
+    if (state == EnemyState::Attack && !damageDealt) {
+        if (frame == hitFrame) {
+            damageDealt = true;
+            return damageDealt;
+        }
+    }
+    return false;
 }
