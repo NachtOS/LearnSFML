@@ -64,6 +64,21 @@ int main() {
         return -1;
     }
 
+    sf::Texture mainMenuBgTexture;
+    if (!mainMenuBgTexture.loadFromFile("assets/MainMenu-Background.png")) {
+        return -1;
+    }
+
+    sf::Texture pauseMenuBgTexture;
+    if (!pauseMenuBgTexture.loadFromFile("assets/PauseMenu-Background.png")) {
+        return -1;
+    }
+
+    sf::Texture gameOverMenuBgTexture;
+    if (!gameOverMenuBgTexture.loadFromFile("assets/GameOverMenu-Background.png")) {
+        return -1;
+    }
+
     sf::Texture hpBarTexture;
     if (!hpBarTexture.loadFromFile("assets/HUD/hp_bar.png")) {
         return -1;
@@ -82,6 +97,18 @@ int main() {
     hpBar.setTextureRect(sf::IntRect({0, 0}, {frameW, frameH}));
     hpBar.setScale({3.f, 3.f});
     hpBar.setPosition({5.f, 5.f});
+
+    sf::Sprite mainMenuBg(mainMenuBgTexture);
+    mainMenuBg.setScale({1.f, 1.f});
+    mainMenuBg.setPosition({0.f, 0.f});
+
+    sf::Sprite pauseMenuBg(pauseMenuBgTexture);
+    pauseMenuBg.setScale({1.f, 1.f});
+    pauseMenuBg.setPosition({0.f, 0.f});
+
+    sf::Sprite gameOverMenuBg(gameOverMenuBgTexture);
+    gameOverMenuBg.setScale({1.f, 1.f});
+    gameOverMenuBg.setPosition({0.f, 0.f});
 
     sf::Sprite buttonResume(buttonTexture);
     buttonResume.setScale({1.5f, 1.5f});
@@ -366,7 +393,7 @@ int main() {
                 }
             }
 
-            window.clear(sf::Color(138, 106, 106));
+            window.draw(gameOverMenuBg);
             window.draw(buttonRestart);
             window.draw(buttonExitToMainMenu);
             window.draw(gameOverText);
@@ -416,7 +443,7 @@ int main() {
                 }
             }
 
-            window.clear(sf::Color(50, 150, 100, 50));
+            window.draw(pauseMenuBg);
             window.draw(buttonResume);
             window.draw(buttonRestart);
             window.draw(buttonExitToMainMenu);
@@ -440,7 +467,7 @@ int main() {
                 }
             }
 
-            window.clear(sf::Color(56, 56, 56));
+            window.draw(mainMenuBg);
             window.draw(buttonPlay);
             window.draw(buttonExitTheGame);
             window.draw(playText);
