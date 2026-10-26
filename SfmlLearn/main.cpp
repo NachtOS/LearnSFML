@@ -48,6 +48,11 @@ int main() {
         return -1;
     }
 
+    sf::Texture enemyIdleTexture;
+    if (!enemyIdleTexture.loadFromFile("assets/enemy/Skeleton_01_White_Idle.png")) {
+        return -1;
+    }
+
     sf::Texture skullKillTexture;
     if (!skullKillTexture.loadFromFile("assets/Skull.png")) {
         return -1;
@@ -89,8 +94,8 @@ int main() {
 
     std::vector<Enemy> enemies;
     for (int i = 0; i < 3; i++) {
-        enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, {distX(rng), distY(rng)}, distSpeed(rng),
-            160.f, 50.f, 10.f));
+        enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, enemyIdleTexture, {distX(rng), distY(rng)},
+            distSpeed(rng), 160.f, 50.f, 10.f));
     }
     // font объявлен раньше текстов, потому что sf::Text хранит ссылку на него
     sf::Font font;
@@ -150,7 +155,7 @@ int main() {
                     enemies.clear();
 
                     for (int i = 0; i < 3; i++) {
-                        enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, {distX(rng), distY(rng)},
+                        enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, enemyIdleTexture, {distX(rng), distY(rng)},
                             distSpeed(rng), 160.f, 50.f, 10.f));
                     }
 
@@ -206,7 +211,7 @@ int main() {
             }
 
             if (enemies.size() < 3) {
-                enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, {distX(rng), distY(rng)},
+                enemies.push_back(Enemy(enemyWalkTexture, enemyAttackTexture, enemyIdleTexture, {distX(rng), distY(rng)},
                     distSpeed(rng), 160.f, 50.f, 10.f));
             }
 
